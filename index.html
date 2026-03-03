@@ -499,12 +499,11 @@
             setTimeout(() => alert.remove(), 3000);
         }
 
-        // التحقق من تسجيل الدخول
-        document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('currentUser')) {
-                window.location.href = 'dashbord.html';
-            }
-        });
+       // إزالة التحقق اليدوي وخل Firebase يتحكم
+    document.addEventListener('DOMContentLoaded', () => {
+    console.log('Index page loaded');
+    // خل auth-check.js يتولى الموضوع
+}); 
     </script>
 </body>
                 </html>
