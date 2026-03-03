@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineLingua | الاختبارات</title>
+    
+    <!-- حماية الصفحة -->
+    <script src="auth-check.js"></script>
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* نفس الـ style اللي عندك */
         .quiz-container {
             max-width: 800px;
             margin: 100px auto 2rem;
@@ -406,7 +411,7 @@
                 <li><a href="dashboard.html">لوحة التحكم</a></li>
             </ul>
             <div class="nav-buttons">
-                <a href="register.html" class="btn btn-primary">تسجيل الدخول</a>
+                <div class="theme-toggle" id="themeToggle"></div>
             </div>
         </div>
     </nav>
@@ -450,7 +455,7 @@
     <script src="translations.js"></script>
     <script src="theme.js"></script>
     <script>
-        // أسئلة الاختبارات
+        // ========== 50+ سؤال جديد ==========
         const QUIZ_QUESTIONS = {
             vocabulary: {
                 beginner: [
@@ -461,10 +466,46 @@
                         explanation: "Hello تستخدم للتحية"
                     },
                     {
+                        question: "ماذا تعني كلمة 'Goodbye'؟",
+                        options: ["مرحباً", "وداعاً", "تصبح على خير", "مساء الخير"],
+                        correct: 1,
+                        explanation: "Goodbye = وداعاً"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Please'؟",
+                        options: ["شكراً", "عفواً", "من فضلك", "آسف"],
+                        correct: 2,
+                        explanation: "Please = من فضلك"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Thank you'؟",
+                        options: ["شكراً", "عفواً", "من فضلك", "آسف"],
+                        correct: 0,
+                        explanation: "Thank you = شكراً"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Yes'؟",
+                        options: ["نعم", "لا", "ربما", "دائماً"],
+                        correct: 0,
+                        explanation: "Yes = نعم"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'No'؟",
+                        options: ["نعم", "لا", "ربما", "أبداً"],
+                        correct: 1,
+                        explanation: "No = لا"
+                    },
+                    {
                         question: "ماذا تعني كلمة 'Book'؟",
                         options: ["قلم", "كتاب", "دفتر", "ممحاة"],
                         correct: 1,
                         explanation: "Book = كتاب"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Pen'؟",
+                        options: ["قلم", "كتاب", "مسطرة", "مقص"],
+                        correct: 0,
+                        explanation: "Pen = قلم"
                     },
                     {
                         question: "ماذا تعني كلمة 'Eat'؟",
@@ -473,16 +514,76 @@
                         explanation: "Eat = يأكل"
                     },
                     {
+                        question: "ماذا تعني كلمة 'Drink'؟",
+                        options: ["يشرب", "يأكل", "ينام", "يمشي"],
+                        correct: 0,
+                        explanation: "Drink = يشرب"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Sleep'؟",
+                        options: ["يأكل", "يشرب", "ينام", "يلعب"],
+                        correct: 2,
+                        explanation: "Sleep = ينام"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Walk'؟",
+                        options: ["يركض", "يمشي", "يقفز", "يجلس"],
+                        correct: 1,
+                        explanation: "Walk = يمشي"
+                    },
+                    {
                         question: "ماذا تعني كلمة 'Happy'؟",
                         options: ["حزين", "سعيد", "متعب", "جائع"],
                         correct: 1,
                         explanation: "Happy = سعيد"
                     },
                     {
+                        question: "ماذا تعني كلمة 'Sad'؟",
+                        options: ["حزين", "سعيد", "متعب", "غاضب"],
+                        correct: 0,
+                        explanation: "Sad = حزين"
+                    },
+                    {
                         question: "ماذا تعني كلمة 'Big'؟",
                         options: ["صغير", "كبير", "طويل", "قصير"],
                         correct: 1,
                         explanation: "Big = كبير"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Small'؟",
+                        options: ["صغير", "كبير", "طويل", "قصير"],
+                        correct: 0,
+                        explanation: "Small = صغير"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Hot'؟",
+                        options: ["بارد", "حار", "دافئ", "مثلج"],
+                        correct: 1,
+                        explanation: "Hot = حار"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Cold'؟",
+                        options: ["بارد", "حار", "دافئ", "مثلج"],
+                        correct: 0,
+                        explanation: "Cold = بارد"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Red'؟",
+                        options: ["أحمر", "أزرق", "أخضر", "أصفر"],
+                        correct: 0,
+                        explanation: "Red = أحمر"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Blue'؟",
+                        options: ["أحمر", "أزرق", "أخضر", "أصفر"],
+                        correct: 1,
+                        explanation: "Blue = أزرق"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Green'؟",
+                        options: ["أحمر", "أزرق", "أخضر", "أصفر"],
+                        correct: 2,
+                        explanation: "Green = أخضر"
                     }
                 ],
                 intermediate: [
@@ -493,10 +594,70 @@
                         explanation: "Beautiful = جميل"
                     },
                     {
+                        question: "ماذا تعني كلمة 'Ugly'؟",
+                        options: ["قبيح", "جميل", "غالي", "رخيص"],
+                        correct: 0,
+                        explanation: "Ugly = قبيح"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Expensive'؟",
+                        options: ["غالي", "رخيص", "جديد", "قديم"],
+                        correct: 0,
+                        explanation: "Expensive = غالي"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Cheap'؟",
+                        options: ["غالي", "رخيص", "جديد", "قديم"],
+                        correct: 1,
+                        explanation: "Cheap = رخيص"
+                    },
+                    {
                         question: "ماذا تعني كلمة 'Understand'؟",
                         options: ["ينسى", "يفهم", "يسمع", "يرى"],
                         correct: 1,
                         explanation: "Understand = يفهم"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Remember'؟",
+                        options: ["ينسى", "يتذكر", "يسمع", "يرى"],
+                        correct: 1,
+                        explanation: "Remember = يتذكر"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Forget'؟",
+                        options: ["ينسى", "يتذكر", "يسمع", "يرى"],
+                        correct: 0,
+                        explanation: "Forget = ينسى"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Travel'؟",
+                        options: ["يعمل", "يسافر", "يدرس", "يلعب"],
+                        correct: 1,
+                        explanation: "Travel = يسافر"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Arrive'؟",
+                        options: ["يغادر", "يصل", "يسافر", "يعود"],
+                        correct: 1,
+                        explanation: "Arrive = يصل"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Leave'؟",
+                        options: ["يغادر", "يصل", "يسافر", "يعود"],
+                        correct: 0,
+                        explanation: "Leave = يغادر"
+                    },
+                    {
+                        question: "اختر الترجمة الصحيحة: 'I have been studying for 2 hours'",
+                        options: ["درست ساعتين", "أدرس منذ ساعتين", "سأدرس ساعتين", "أدرس كل ساعتين"],
+                        correct: 1,
+                        explanation: "I have been studying = أدرس منذ"
+                    },
+                    {
+                        question: "اختر الترجمة الصحيحة: 'She has gone to London'",
+                        options: ["ذهبت إلى لندن", "زارت لندن", "تعيش في لندن", "ستذهب للندن"],
+                        correct: 0,
+                        explanation: "Has gone = ذهبت"
                     }
                 ],
                 advanced: [
@@ -505,6 +666,48 @@
                         options: ["لذلك", "مع ذلك", "بسبب", "أيضاً"],
                         correct: 1,
                         explanation: "Nevertheless = مع ذلك"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Consequently'؟",
+                        options: ["وبالتالي", "مع ذلك", "بسبب", "أيضاً"],
+                        correct: 0,
+                        explanation: "Consequently = وبالتالي"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Therefore'؟",
+                        options: ["لذلك", "مع ذلك", "بسبب", "أيضاً"],
+                        correct: 0,
+                        explanation: "Therefore = لذلك"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'However'؟",
+                        options: ["لذلك", "مع ذلك", "بسبب", "أيضاً"],
+                        correct: 1,
+                        explanation: "However = مع ذلك"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Significant'؟",
+                        options: ["صغير", "كبير/مهم", "ضعيف", "قوي"],
+                        correct: 1,
+                        explanation: "Significant = كبير/مهم"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Approximately'؟",
+                        options: ["بالضبط", "تقريباً", "حوالي", "تقريباً"],
+                        correct: 1,
+                        explanation: "Approximately = تقريباً"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Controversial'؟",
+                        options: ["متفق عليه", "مثير للجدل", "واضح", "غامض"],
+                        correct: 1,
+                        explanation: "Controversial = مثير للجدل"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Ambiguous'؟",
+                        options: ["واضح", "غامض", "بسيط", "معقد"],
+                        correct: 1,
+                        explanation: "Ambiguous = غامض"
                     }
                 ]
             },
@@ -515,6 +718,30 @@
                         options: ["He go to school", "He goes to school", "He going to school", "He gone to school"],
                         correct: 1,
                         explanation: "مع He نستخدم goes"
+                    },
+                    {
+                        question: "أي جملة صحيحة؟",
+                        options: ["She like coffee", "She likes coffee", "She liking coffee", "She is like coffee"],
+                        correct: 1,
+                        explanation: "مع She نستخدم likes"
+                    },
+                    {
+                        question: "أي جملة صحيحة؟",
+                        options: ["I am a student", "I is a student", "I are a student", "I be student"],
+                        correct: 0,
+                        explanation: "مع I نستخدم am"
+                    },
+                    {
+                        question: "اختر الفعل الماضي لكلمة 'Go'",
+                        options: ["Goed", "Went", "Gone", "Goes"],
+                        correct: 1,
+                        explanation: "الماضي من Go هو Went"
+                    },
+                    {
+                        question: "اختر الفعل الماضي لكلمة 'Eat'",
+                        options: ["Eated", "Ate", "Eaten", "Eats"],
+                        correct: 1,
+                        explanation: "الماضي من Eat هو Ate"
                     }
                 ],
                 intermediate: [
@@ -523,6 +750,24 @@
                         options: ["I have been to London", "I have gone to London", "I was to London", "I am to London"],
                         correct: 0,
                         explanation: "I have been = لقد زرت"
+                    },
+                    {
+                        question: "أي جملة صحيحة؟",
+                        options: ["She has lived here since 2010", "She have lived here since 2010", "She is lived here since 2010", "She was lived here since 2010"],
+                        correct: 0,
+                        explanation: "مع She نستخدم has"
+                    },
+                    {
+                        question: "اختر الجملة الصحيحة في المستقبل",
+                        options: ["I will go tomorrow", "I go tomorrow", "I am go tomorrow", "I going tomorrow"],
+                        correct: 0,
+                        explanation: "المستقبل = will + الفعل"
+                    },
+                    {
+                        question: "اختر الجملة الصحيحة في الماضي المستمر",
+                        options: ["I was watching TV", "I watched TV", "I am watching TV", "I watch TV"],
+                        correct: 0,
+                        explanation: "الماضي المستمر = was/were + ing"
                     }
                 ],
                 advanced: [
@@ -531,6 +776,86 @@
                         options: ["If I was rich", "If I were rich", "If I am rich", "If I be rich"],
                         correct: 1,
                         explanation: "في الحالات الافتراضية نستخدم were"
+                    },
+                    {
+                        question: "أي جملة صحيحة؟",
+                        options: ["I wish I knew the answer", "I wish I know the answer", "I wish I known the answer", "I wish I was know"],
+                        correct: 0,
+                        explanation: "بعد wish نستخدم الماضي"
+                    },
+                    {
+                        question: "اختر الجملة الصحيحة في المبني للمجهول",
+                        options: ["The cake was eaten", "The cake ate", "The cake is eat", "The cake eating"],
+                        correct: 0,
+                        explanation: "المبني للمجهول = was/were + past participle"
+                    },
+                    {
+                        question: "اختر الجملة الصحيحة في التام",
+                        options: ["By next year, I will have graduated", "By next year, I will graduate", "By next year, I have graduated", "By next year, I graduated"],
+                        correct: 0,
+                        explanation: "Future Perfect = will have + past participle"
+                    }
+                ]
+            },
+            mixed: {
+                beginner: [
+                    {
+                        question: "اختر الترجمة الصحيحة: 'My name is Ahmed'",
+                        options: ["اسمي أحمد", "أنا أحمد", "هذا أحمد", "أحمد هنا"],
+                        correct: 0,
+                        explanation: "My name is = اسمي"
+                    },
+                    {
+                        question: "كم حرف في كلمة 'Hello'؟",
+                        options: ["3", "4", "5", "6"],
+                        correct: 2,
+                        explanation: "Hello = 5 أحرف"
+                    },
+                    {
+                        question: "ما هو جمع كلمة 'Book'؟",
+                        options: ["Books", "Bookes", "Bookies", "Booker"],
+                        correct: 0,
+                        explanation: "Books = كتب"
+                    }
+                ],
+                intermediate: [
+                    {
+                        question: "اختر الجملة الصحيحة",
+                        options: ["I have 20 years old", "I am 20 years old", "I is 20 years old", "I are 20 years old"],
+                        correct: 1,
+                        explanation: "I am = أنا عمري"
+                    },
+                    {
+                        question: "ما هو عكس كلمة 'Happy'؟",
+                        options: ["Sad", "Big", "Small", "Fast"],
+                        correct: 0,
+                        explanation: "عكس happy = sad"
+                    },
+                    {
+                        question: "اختر المرادف الصحيح لكلمة 'Fast'",
+                        options: ["Slow", "Quick", "Big", "Small"],
+                        correct: 1,
+                        explanation: "Fast = Quick"
+                    }
+                ],
+                advanced: [
+                    {
+                        question: "ما معنى idiom 'Break a leg'؟",
+                        options: ["اكسر رجلك", "حظ سعيد", "تعال هنا", "اذهب بعيداً"],
+                        correct: 1,
+                        explanation: "Break a leg = حظ سعيد (في المسرح)"
+                    },
+                    {
+                        question: "ما معنى 'Once in a blue moon'؟",
+                        options: ["مرة واحدة", "نادراً جداً", "كل يوم", "دائماً"],
+                        correct: 1,
+                        explanation: "Once in a blue moon = نادراً جداً"
+                    },
+                    {
+                        question: "ما معنى 'Piece of cake'؟",
+                        options: ["قطعة كعكة", "شيء سهل", "شيء صعب", "لذيذ"],
+                        correct: 1,
+                        explanation: "Piece of cake = شيء سهل"
                     }
                 ]
             }
@@ -544,10 +869,9 @@
         let userAnswers = [];
         let quizCompleted = false;
         let timer = null;
-        let timeLeft = 300; // 5 دقائق
+        let timeLeft = 300;
         let score = 0;
 
-        // تحميل الصفحة
         document.addEventListener('DOMContentLoaded', () => {
             loadQuiz();
         });
@@ -575,7 +899,6 @@
         }
 
         function loadQuiz() {
-            // جلب الأسئلة
             currentQuestions = QUIZ_QUESTIONS[currentQuizType]?.[currentLevel] || 
                               QUIZ_QUESTIONS.vocabulary.beginner;
             
@@ -654,7 +977,6 @@
                 </div>
             `;
 
-            // استعادة الإجابة السابقة
             const prevAnswer = userAnswers[currentQuestionIndex];
             if (prevAnswer !== null) {
                 const options = document.querySelectorAll('.option-item');
@@ -684,7 +1006,6 @@
             const options = document.querySelectorAll('.option-item');
             const explanation = document.getElementById('explanation');
             
-            // إظهار الإجابة الصحيحة
             options.forEach((opt, index) => {
                 opt.classList.remove('selected');
                 if (index === question.correct) {
@@ -694,10 +1015,8 @@
                 }
             });
 
-            // إظهار الشرح
             explanation.classList.add('show');
 
-            // منع التحديد مرة أخرى
             options.forEach(opt => {
                 opt.style.pointerEvents = 'none';
             });
@@ -750,7 +1069,6 @@
             clearInterval(timer);
             quizCompleted = true;
             
-            // حساب النتيجة
             score = userAnswers.reduce((count, answer, index) => {
                 return count + (answer === currentQuestions[index].correct ? 1 : 0);
             }, 0);
@@ -847,4 +1165,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
