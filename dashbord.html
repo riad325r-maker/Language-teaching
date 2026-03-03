@@ -4,22 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineLingua | لوحة التحكم</title>
+    
+    <!-- حماية الصفحة -->
+    <script src="auth-check.js"></script>
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* ======================================== */
-        /* DASHBOARD LAYOUT */
-        /* ======================================== */
+        /* نفس الـ style اللي عندك */
         .dashboard {
             display: flex;
             min-height: 100vh;
             background-color: var(--bg-primary);
         }
 
-        /* ======================================== */
-        /* SIDEBAR - الشريط الجانبي */
-        /* ======================================== */
         .sidebar {
             width: 280px;
             background-color: var(--bg-card);
@@ -239,9 +238,6 @@
             color: var(--primary);
         }
 
-        /* ======================================== */
-        /* MAIN CONTENT - المحتوى الرئيسي */
-        /* ======================================== */
         .main-content {
             flex: 1;
             margin-right: 280px;
@@ -250,9 +246,6 @@
             min-height: 100vh;
         }
 
-        /* ======================================== */
-        /* DASHBOARD HEADER */
-        /* ======================================== */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -414,9 +407,6 @@
             font-size: 0.8rem;
         }
 
-        /* ======================================== */
-        /* STATS CARDS - بطاقات الإحصائيات */
-        /* ======================================== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -471,22 +461,18 @@
 
         .stat-icon.blue {
             background: linear-gradient(135deg, #3b82f6, #60a5fa);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
         }
 
         .stat-icon.green {
             background: linear-gradient(135deg, #10b981, #34d399);
-            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
         }
 
         .stat-icon.purple {
             background: linear-gradient(135deg, #8b5cf6, #a78bfa);
-            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
         }
 
         .stat-icon.orange {
             background: linear-gradient(135deg, #f59e0b, #fbbf24);
-            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
         }
 
         .stat-info {
@@ -523,9 +509,6 @@
             color: var(--text-tertiary);
         }
 
-        /* ======================================== */
-        /* PROGRESS SECTION - قسم التقدم */
-        /* ======================================== */
         .progress-section {
             background-color: var(--bg-card);
             border-radius: var(--radius-lg);
@@ -733,9 +716,6 @@
             padding: 0.75rem 2rem;
         }
 
-        /* ======================================== */
-        /* DAILY CHALLENGES - التحديات اليومية */
-        /* ======================================== */
         .challenges-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -818,9 +798,6 @@
             gap: 0.25rem;
         }
 
-        /* ======================================== */
-        /* RECOMMENDATIONS - التوصيات */
-        /* ======================================== */
         .movies-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -917,9 +894,6 @@
             transform: scale(1.1);
         }
 
-        /* ======================================== */
-        /* COMMUNITY ACTIVITY - نشاط المجتمع */
-        /* ======================================== */
         .activity-feed {
             background-color: var(--bg-card);
             border-radius: var(--radius-lg);
@@ -963,9 +937,6 @@
             font-size: 0.8rem;
         }
 
-        /* ======================================== */
-        /* ACHIEVEMENTS - الإنجازات */
-        /* ======================================== */
         .achievements-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1023,9 +994,6 @@
             color: var(--text-tertiary);
         }
 
-        /* ======================================== */
-        /* RESPONSIVE */
-        /* ======================================== */
         @media (max-width: 992px) {
             .sidebar {
                 transform: translateX(100%);
@@ -1073,9 +1041,7 @@
 </head>
 <body>
     <div class="dashboard">
-        <!-- ======================================== -->
-        <!-- SIDEBAR - الشريط الجانبي -->
-        <!-- ======================================== -->
+        <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
@@ -1092,12 +1058,12 @@
                 <a href="lessons.html">
                     <i class="fas fa-book"></i>
                     <span>الدروس</span>
-                    <span class="badge">24</span>
+                    <span class="badge" id="lessonsBadge">0</span>
                 </a>
                 <a href="stories.html">
                     <i class="fas fa-book-open"></i>
                     <span>القصص</span>
-                    <span class="badge">6</span>
+                    <span class="badge" id="storiesBadge">0</span>
                 </a>
                 <a href="quiz.html">
                     <i class="fas fa-question-circle"></i>
@@ -1112,6 +1078,7 @@
                 <a href="#achievements">
                     <i class="fas fa-trophy"></i>
                     <span>الإنجازات</span>
+                    <span class="badge" id="achievementsBadge">0</span>
                 </a>
                 <a href="#community">
                     <i class="fas fa-users"></i>
@@ -1126,14 +1093,14 @@
             <div class="sidebar-footer">
                 <div class="user-info" onclick="toggleUserMenu()">
                     <div class="user-avatar">
-                        <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=6366f1&color=fff&size=100" alt="User">
+                        <img src="https://ui-avatars.com/api/?name=مستخدم&background=6366f1&color=fff&size=100" alt="User" id="userAvatar">
                         <span class="online-status"></span>
                     </div>
                     <div class="user-details">
-                        <div class="user-name" id="userName">أحمد محمد</div>
+                        <div class="user-name" id="userName">مستخدم</div>
                         <div class="user-level">
                             <i class="fas fa-crown"></i>
-                            <span id="userLevel">مستوى متوسط</span>
+                            <span id="userLevel">مستوى مبتدئ</span>
                         </div>
                     </div>
                     <i class="fas fa-chevron-up user-arrow"></i>
@@ -1143,57 +1110,35 @@
                     <a href="#profile"><i class="fas fa-user"></i> الملف الشخصي</a>
                     <a href="#stats"><i class="fas fa-chart-line"></i> إحصائياتي</a>
                     <a href="#settings"><i class="fas fa-cog"></i> الإعدادات</a>
-                    <a href="index.html"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</a>
                 </div>
             </div>
         </aside>
 
-        <!-- ======================================== -->
-        <!-- MAIN CONTENT - المحتوى الرئيسي -->
-        <!-- ======================================== -->
+        <!-- MAIN CONTENT -->
         <main class="main-content">
             <!-- HEADER -->
             <header class="dashboard-header">
                 <div class="header-left">
-                    <h1>مرحباً أحمد! 👋</h1>
+                    <h1>مرحباً <span id="welcomeName">أحمد</span>! 👋</h1>
                     <div class="welcome-message">
                         <i class="fas fa-fire"></i>
-                        <span id="streakMessage">7 أيام متتالية! استمر 💪</span>
+                        <span id="streakMessage">0 أيام متتالية! ابدأ التعلم 🔥</span>
                     </div>
                 </div>
 
                 <div class="header-right">
                     <div class="header-search">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="ابحث عن كلمة أو قصة...">
+                        <input type="text" placeholder="ابحث عن كلمة أو قصة..." id="searchInput">
                     </div>
 
                     <div class="notifications">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                        <div class="notifications-dropdown">
+                        <span class="notification-badge" id="notificationCount">0</span>
+                        <div class="notifications-dropdown" id="notificationsList">
                             <h4>الإشعارات</h4>
-                            <a href="#" class="notification-item unread">
-                                <i class="fas fa-trophy"></i>
-                                <div>
-                                    <p>تهانينا! أكملت تحدي 5 كلمات</p>
-                                    <small>منذ 5 دقائق</small>
-                                </div>
-                            </a>
-                            <a href="#" class="notification-item">
-                                <i class="fas fa-fire"></i>
-                                <div>
-                                    <p>7 أيام متتالية! استمر بنفس القوة</p>
-                                    <small>منذ ساعة</small>
-                                </div>
-                            </a>
-                            <a href="#" class="notification-item">
-                                <i class="fas fa-star"></i>
-                                <div>
-                                    <p>قصة جديدة: "The Lost Cat"</p>
-                                    <small>منذ 3 ساعات</small>
-                                </div>
-                            </a>
+                            <div id="notificationsEmpty">لا توجد إشعارات جديدة</div>
                         </div>
                     </div>
 
@@ -1204,18 +1149,18 @@
                 </div>
             </header>
 
-            <!-- STATS CARDS - بطاقات الإحصائيات -->
+            <!-- STATS CARDS -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon blue">
                         <i class="fas fa-fire"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 id="streakCount">7</h3>
+                        <h3 id="streakCount">0</h3>
                         <p>أيام متتالية</p>
-                        <div class="stat-trend positive">
+                        <div class="stat-trend positive" id="streakTrend">
                             <i class="fas fa-arrow-up"></i>
-                            +2 من الأسبوع الماضي
+                            <span id="streakChange">0</span> من الأسبوع الماضي
                         </div>
                     </div>
                 </div>
@@ -1225,11 +1170,11 @@
                         <i class="fas fa-book"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 id="wordsCount">120</h3>
+                        <h3 id="wordsCount">0</h3>
                         <p>كلمة محفوظة</p>
-                        <div class="stat-trend positive">
+                        <div class="stat-trend positive" id="wordsTrend">
                             <i class="fas fa-arrow-up"></i>
-                            +15 اليوم
+                            <span id="wordsChange">0</span> اليوم
                         </div>
                     </div>
                 </div>
@@ -1239,11 +1184,11 @@
                         <i class="fas fa-book-open"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 id="storiesCount">4</h3>
+                        <h3 id="storiesCount">0</h3>
                         <p>قصص مقروءة</p>
-                        <div class="stat-trend positive">
+                        <div class="stat-trend positive" id="storiesTrend">
                             <i class="fas fa-arrow-up"></i>
-                            +1 اليوم
+                            <span id="storiesChange">0</span> اليوم
                         </div>
                     </div>
                 </div>
@@ -1253,8 +1198,395 @@
                         <i class="fas fa-trophy"></i>
                     </div>
                     <div class="stat-info">
-                        <h3 id="achievementsCount">8</h3>
+                        <h3 id="achievementsCount">0</h3>
                         <p>إنجازات</p>
-                        <div class="stat-trend neutral">
-                            <i class="fas fa-minus"></i> 2 متبقية للذهب
+                        <div class="stat-trend neutral" id="achievementsTrend">
+                            <i class="fas fa-minus"></i>
+                            <span id="achievementsRemaining">0</span> متبقية للذهب
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROGRESS SECTION -->
+            <div class="progress-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fas fa-play-circle"></i>
+                        أكمل المشاهدة
+                    </h2>
+                    <a href="lessons.html" class="view-all">
+                        عرض الكل <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+                <div class="continue-card" onclick="continueLearning()" id="continueCard" style="display: none;">
+                    <div class="continue-image">
+                        <img src="https://images.unsplash.com/photo-1584905068096-36e8c5d0e63b?w=400" alt="Lesson" id="continueImage">
+                        <span class="duration" id="continueDuration">15 دقيقة</span>
+                    </div>
+                    <div class="continue-info">
+                        <div class="movie-meta">
+                            <span class="movie-level beginner" id="continueLevel">مبتدئ</span>
+                            <span class="movie-year" id="continueCategory">المفردات</span>
+                        </div>
+                        <h3 id="continueTitle">ابدأ رحلتك التعليمية</h3>
+                        <p class="movie-description" id="continueDesc">اختر درساً من الدروس وابدأ التعلم</p>
+                        
+                        <div class="progress-header">
+                            <span>تقدمك</span>
+                            <span class="progress-percentage" id="continueProgress">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" id="continueProgressBar" style="width: 0%"></div>
+                        </div>
+
+                        <div class="learned-words">
+                            <span class="words-label">كلمات ستتعلمها:</span>
+                            <div class="word-chips" id="continueWords">
+                                <span class="word-chip">ابدأ الآن</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary continue-btn" id="continueBtn">
+                            <i class="fas fa-play"></i>
+                            ابدأ التعلم
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAILY CHALLENGES -->
+            <div class="progress-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fas fa-bolt"></i>
+                        التحديات اليومية
+                    </h2>
+                    <a href="quiz.html" class="view-all">
+                        عرض الكل <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+                <div class="challenges-grid" id="challengesGrid">
+                    <!-- التحديات تتحط هنا -->
+                </div>
+            </div>
+
+            <!-- RECOMMENDATIONS -->
+            <div class="progress-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fas fa-star"></i>
+                        اقتراحات لك
+                    </h2>
+                    <a href="lessons.html" class="view-all">
+                        عرض الكل <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+
+                <div class="movies-grid" id="recommendationsGrid">
+                    <!-- التوصيات تتحط هنا -->
+                </div>
+            </div>
+
+            <!-- COMMUNITY ACTIVITY -->
+            <div class="progress-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fas fa-users"></i>
+                        نشاط المجتمع
+                    </h2>
+                </div>
+
+                <div class="activity-feed" id="activityFeed">
+                    <!-- النشاط يتحط هنا -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // استيراد Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // إعدادات Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnZGheBuw2S-dJUZ6f1jsx9e2ODv-gkX4",
+            authDomain: "project-9ca8a.firebaseapp.com",
+            projectId: "project-9ca8a",
+            storageBucket: "project-9ca8a.firebasestorage.app",
+            messagingSenderId: "1001751197267",
+            appId: "1:1001751197267:web:d6c56c243d0f3d678f38a6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // بيانات المستخدم
+        let currentUser = null;
+        let userData = null;
+
+        // التحقق من حالة المصادقة
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserData(user.uid);
+                loadDashboardData();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // تحميل بيانات المستخدم من Firestore
+        async function loadUserData(uid) {
+            try {
+                const userDoc = await getDoc(doc(db, "users", uid));
+                if (userDoc.exists()) {
+                    userData = userDoc.data();
+                    
+                    // تحديث واجهة المستخدم
+                    document.getElementById('userName').textContent = `${userData.firstName} ${userData.lastName}`;
+                    document.getElementById('welcomeName').textContent = userData.firstName;
+                    document.getElementById('userLevel').textContent = `مستوى ${userData.level || 'مبتدئ'}`;
+                    
+                    // تحديث الصورة
+                    const avatarUrl = `https://ui-avatars.com/api/?name=${userData.firstName}+${userData.lastName}&background=6366f1&color=fff&size=100`;
+                    document.getElementById('userAvatar').src = avatarUrl;
+                    
+                    // تحديث العدادت
+                    updateStats();
+                }
+            } catch (error) {
+                console.error("Error loading user data:", error);
+            }
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            if (!userData) return;
+
+            // الكلمات المحفوظة
+            const savedWords = userData.savedWords?.length || 0;
+            document.getElementById('savedWordsBadge').textContent = savedWords;
+            document.getElementById('wordsCount').textContent = savedWords;
+            
+            // القصص المقروءة
+            const readStories = userData.readStories?.length || 0;
+            document.getElementById('storiesBadge').textContent = readStories;
+            document.getElementById('storiesCount').textContent = readStories;
+            
+            // Streak
+            const streak = userData.streak || 0;
+            document.getElementById('streakCount').textContent = streak;
+            document.getElementById('streakMessage').textContent = 
+                streak > 0 ? `${streak} أيام متتالية! استمر 💪` : 'ابدأ التعلم الآن! 🔥';
+            
+            // الإنجازات
+            const achievements = userData.achievements?.length || 0;
+            document.getElementById('achievementsBadge').textContent = achievements;
+            document.getElementById('achievementsCount').textContent = achievements;
+        }
+
+        // تحميل بيانات لوحة التحكم
+        function loadDashboardData() {
+            loadChallenges();
+            loadRecommendations();
+            loadActivityFeed();
+            loadContinueLearning();
+        }
+
+        // تحميل التحديات
+        function loadChallenges() {
+            const challenges = [
+                {
+                    icon: 'hot',
+                    title: 'تحدي 5 كلمات',
+                    desc: 'تعلم 5 كلمات جديدة اليوم',
+                    progress: 60,
+                    participants: '3.2k'
+                },
+                {
+                    icon: 'new',
+                    title: 'تحدي النطق',
+                    desc: 'حسن نطقك مع 10 جمل',
+                    progress: 30,
+                    participants: '1.8k'
+                },
+                {
+                    icon: 'trending',
+                    title: 'تحدي القراءة',
+                    desc: 'اقرأ قصة وأجب على الأسئلة',
+                    progress: 15,
+                    participants: '956'
+                }
+            ];
+
+            const grid = document.getElementById('challengesGrid');
+            grid.innerHTML = challenges.map(c => `
+                <div class="challenge-card" onclick="window.location.href='quiz.html'">
+                    <div class="challenge-icon ${c.icon}">
+                        <i class="fas fa-${c.icon === 'hot' ? 'fire' : c.icon === 'new' ? 'star' : 'chart-line'}"></i>
+                    </div>
+                    <div class="challenge-info">
+                        <h4>${c.title}</h4>
+                        <p>${c.desc}</p>
+                        <div class="challenge-progress">
+                            <div class="progress-bar small">
+                                <div class="progress" style="width: ${c.progress}%"></div>
+                            </div>
+                            <span class="participants">
+                                <i class="fas fa-users"></i> ${c.participants}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // تحميل التوصيات
+        function loadRecommendations() {
+            const recommendations = [
+                {
+                    id: 1,
+                    title: 'المفردات الأساسية',
+                    image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=200',
+                    words: 20,
+                    level: 'مبتدئ'
+                },
+                {
+                    id: 2,
+                    title: 'الأزمنة في الإنجليزية',
+                    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=200',
+                    words: 15,
+                    level: 'متوسط'
+                },
+                {
+                    id: 3,
+                    title: 'محادثات يومية',
+                    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200',
+                    words: 25,
+                    level: 'متوسط'
+                },
+                {
+                    id: 4,
+                    title: 'قواعد متقدمة',
+                    image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=200',
+                    words: 30,
+                    level: 'متقدم'
+                }
+            ];
+
+            const grid = document.getElementById('recommendationsGrid');
+            grid.innerHTML = recommendations.map(r => `
+                <div class="movie-card" onclick="window.location.href='lessons.html'">
+                    <img src="${r.image}" alt="${r.title}">
+                    <div class="movie-info">
+                        <h3>${r.title}</h3>
+                        <p><i class="fas fa-book"></i> ${r.words} كلمة</p>
+                        <p><i class="fas fa-signal"></i> ${r.level}</p>
+                    </div>
+                    <div class="movie-overlay">
+                        <button class="play-btn"><i class="fas fa-play"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // تحميل نشاط المجتمع
+        function loadActivityFeed() {
+            const activities = [
+                {
+                    name: 'سارة',
+                    action: 'أكملت تحدي 5 كلمات',
+                    time: 'منذ 5 دقائق',
+                    icon: '🔥'
+                },
+                {
+                    name: 'عمر',
+                    action: 'حصل على شارة "المتعلم الذهبي"',
+                    time: 'منذ 15 دقيقة',
+                    icon: '🏆'
+                },
+                {
+                    name: 'نورة',
+                    action: 'حفظت 20 كلمة جديدة',
+                    time: 'منذ ساعة',
+                    icon: '📚'
+                }
+            ];
+
+            const feed = document.getElementById('activityFeed');
+            feed.innerHTML = activities.map(a => `
+                <div class="activity-item">
+                    <img src="https://ui-avatars.com/api/?name=${a.name}&background=6366f1&color=fff" alt="${a.name}">
+                    <div class="activity-content">
+                        <p><strong>${a.name}</strong> ${a.action} ${a.icon}</p>
+                        <small>${a.time}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // تحميل آخر درس
+        function loadContinueLearning() {
+            const lastLesson = JSON.parse(localStorage.getItem('lastLesson'));
+            if (lastLesson) {
+                document.getElementById('continueCard').style.display = 'flex';
+                document.getElementById('continueTitle').textContent = lastLesson.title;
+                document.getElementById('continueProgress').textContent = lastLesson.progress + '%';
+                document.getElementById('continueProgressBar').style.width = lastLesson.progress + '%';
+            }
+        }
+
+        // تسجيل الخروج
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+        };
+
+        // متابعة التعلم
+        window.continueLearning = function() {
+            const lastLesson = JSON.parse(localStorage.getItem('lastLesson'));
+            if (lastLesson) {
+                window.location.href = lastLesson.url || 'lessons.html';
+            } else {
+                window.location.href = 'lessons.html';
+            }
+        };
+
+        // تبديل قائمة المستخدم
+        window.toggleUserMenu = function() {
+            document.getElementById('userQuickMenu').classList.toggle('show');
+        };
+
+        // البحث
+        document.getElementById('searchInput')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = e.target.value;
+                if (query) {
+                    window.location.href = `lessons.html?search=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+
+        // إغلاق قائمة المستخدم عند النقر خارجها
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.user-info')) {
+                document.getElementById('userQuickMenu')?.classList.remove('show');
+            }
+        });
+    </script>
+    <script src="translations.js"></script>
+    <script src="theme.js"></script>
+</body>
+                        </html>
