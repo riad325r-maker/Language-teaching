@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLingua | تحديد المستوى</title>
+    
+    <!-- حماية الصفحة - لا يدخل إلا المستخدمين المسجلين -->
+    <script type="module" src="auth-check.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* إخفاء شريط التنقل */
+        .navbar {
+            display: none;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .test-container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .test-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .test-header i {
+            font-size: 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .test-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .test-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bg-tertiary);
+            border: 3px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .step.active .step-number {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .step-line {
+            width: 100px;
+            height: 3px;
+            background-color: var(--border-light);
+            margin: 0 1rem;
+        }
+
+        .step-line.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .test-section {
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .test-section.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-card {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .option-card input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .option-content {
+            padding: 2rem 1.5rem;
+            border: 3px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            background-color: var(--bg-primary);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .option-card:hover .option-content {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .option-card input:checked + .option-content {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.1), 
+                rgba(236, 72, 153, 0.1));
+        }
+
+        .option-content i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .option-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .option-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .tenses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .tense-card {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .tense-card input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .tense-content {
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            background-color: var(--bg-primary);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tense-card:hover .tense-content {
+            border-color: var(--primary);
+            background-color: var(--bg-hover);
+        }
+
+        .tense-card input:checked + .tense-content {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.1), 
+                rgba(236, 72, 153, 0.1));
+        }
+
+        .tense-content span {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tense-content small {
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: var(--bg-hover);
+        }
+
+        .btn-primary:disabled, .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-lg);
+            color: white;
+        }
+
+        .result-box h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-level {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 1rem 0;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .result-stat {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+        }
+
+        .result-stat .number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .recommendations {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .recommendations li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: var(--radius-md);
+            background: white;
+            border: 2px solid;
+            box-shadow: var(--shadow-lg);
+            z-index: 9999;
+            animation: slideDown 0.3s ease;
+        }
+
+        .alert.success {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert.error {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-card">
+            <div class="test-header">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>تحديد المستوى</h1>
+                <p>أجب على هذه الأسئلة لتحديد مستواك بالضبط</p>
+            </div>
+
+            <!-- شريط التقدم -->
+            <div class="progress-steps">
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <span class="step-label">المفردات</span>
+                </div>
+                <div class="step-line" id="stepLine1"></div>
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <span class="step-label">القواعد</span>
+                </div>
+                <div class="step-line" id="stepLine2"></div>
+                <div class="step" id="step3">
+                    <div class="step-number">3</div>
+                    <span class="step-label">النتيجة</span>
+                </div>
+            </div>
+
+            <!-- القسم 1: المفردات -->
+            <div class="test-section active" id="section1">
+                <h3 class="section-title">كم كلمة تقريباً تعرف؟</h3>
+                
+                <div class="options-grid">
+                    <label class="option-card">
+                        <input type="radio" name="vocab" value="beginner">
+                        <div class="option-content">
+                            <i class="fas fa-seedling"></i>
+                            <h3>أقل من 500</h3>
+                            <p>مستوى مبتدئ - تعرف الكلمات الأساسية</p>
+                        </div>
+                    </label>
+                    
+                    <label class="option-card">
+                        <input type="radio" name="vocab" value="intermediate">
+                        <div class="option-content">
+                            <i class="fas fa-tree"></i>
+                            <h3>500 - 1500</h3>
+                            <p>مستوى متوسط - تستطيع فهم محادثات بسيطة</p>
+                        </div>
+                    </label>
+                    
+                    <label class="option-card">
+                        <input type="radio" name="vocab" value="advanced">
+                        <div class="option-content">
+                            <i class="fas fa-crown"></i>
+                            <h3>أكثر من 1500</h3>
+                            <p>مستوى متقدم - تقرأ وتكتب بطلاقة</p>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="nextSection()" id="nextBtn1">
+                        التالي
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- القسم 2: الأزمنة -->
+            <div class="test-section" id="section2">
+                <h3 class="section-title">اختر الأزمنة التي تعرفها</h3>
+                
+                <div class="tenses-grid">
+                    <label class="tense-card">
+                        <input type="checkbox" name="tense" value="present-simple">
+                        <div class="tense-content">
+                            <span>Present Simple</span>
+                            <small>المضارع البسيط</small>
+                        </div>
+                    </label>
+                    
+                    <label class="tense-card">
+                        <input type="checkbox" name="tense" value="present-continuous">
+                        <div class="tense-content">
+                            <span>Present Continuous</span>
+                            <small>المضارع المستمر</small>
+                        </div>
+                    </label>
+                    
+                    <label class="tense-card">
+                        <input type="checkbox" name="tense" value="past-simple">
+                        <div class="tense-content">
+                            <span>Past Simple</span>
+                            <small>الماضي البسيط</small>
+                        </div>
+                    </label>
+                    
+                    <label class="tense-card">
+                        <input type="checkbox" name="tense" value="past-continuous">
+                        <div class="tense-content">
+                            <span>Past Continuous</span>
+                            <small>الماضي المستمر</small>
+                        </div>
+                    </label>
+                    
+                    <label class="tense-card">
+                        <input type="checkbox" name="tense" value="present-perfect">
+                        <div class="tense-content">
+                            <span>Present Perfect</span>
+                            <small>المضارع التام</small>
+                        </div>
+                    </label>
+                    
+                    <label class="tense-card">
+                        <input type="checkbox" name="tense" value="future">
+                        <div class="tense-content">
+                            <span>Future</span>
+                            <small>المستقبل</small>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="prevSection()">
+                        <i class="fas fa-arrow-right"></i>
+                        السابق
+                    </button>
+                    <button class="btn-primary" onclick="calculateLevel()" id="calculateBtn">
+                        عرض نتيجتي
+                        <i class="fas fa-chart-line"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- القسم 3: النتيجة -->
+            <div class="test-section" id="section3">
+                <div class="result-box">
+                    <h2>مستواك هو:</h2>
+                    <div class="result-level" id="resultLevel">-</div>
+                    
+                    <div class="result-details">
+                        <div class="result-stat">
+                            <div class="number" id="resultVocab">0</div>
+                            <div>مستوى المفردات</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="number" id="resultTenses">0</div>
+                            <div>أزمنة</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="number" id="resultScore">0%</div>
+                            <div>التقييم</div>
+                        </div>
+                    </div>
+
+                    <h3>توصيات لك:</h3>
+                    <ul class="recommendations" id="recommendations">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>ابدأ بتعلم الكلمات الأساسية</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>ركز على الأزمنة البسيطة أولاً</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>تدرب على القراءة يومياً</span>
+                        </li>
+                    </ul>
+
+                    <button class="btn-primary" onclick="saveLevel()" id="saveBtn">
+                        <i class="fas fa-check"></i>
+                        حفظ وبدء التعلم
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { auth } from './assets/js/firebase-config.js';
+        import { updateUserLevel } from './assets/js/auth.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        let currentUser = null;
+        let userData = {};
+
+        // التحقق من المستخدم
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'index.html';
+            } else {
+                currentUser = user;
+            }
+        });
+
+        // التنقل بين الأقسام
+        window.nextSection = function() {
+            const vocab = document.querySelector('input[name="vocab"]:checked')?.value;
+            if (!vocab) {
+                alert('الرجاء اختيار مستوى المفردات');
+                return;
+            }
+            
+            userData.vocab = vocab;
+            
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('stepLine1').classList.add('active');
+            document.getElementById('step2').classList.add('active');
+            
+            document.getElementById('section1').classList.remove('active');
+            document.getElementById('section2').classList.add('active');
+        };
+
+        window.prevSection = function() {
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step1').classList.remove('completed');
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('stepLine1').classList.remove('active');
+            
+            document.getElementById('section2').classList.remove('active');
+            document.getElementById('section1').classList.add('active');
+        };
+
+        // حساب المستوى
+        window.calculateLevel = function() {
+            const tenses = Array.from(document.querySelectorAll('input[name="tense"]:checked')).map(cb => cb.value);
+            const vocab = userData.vocab;
+
+            if (tenses.length === 0) {
+                alert('الرجاء اختيار الأزمنة التي تعرفها');
+                return;
+            }
+
+            userData.tenses = tenses;
+
+            // حساب النتيجة
+            let score = 0;
+            let level = '';
+            let levelEn = '';
+            let recommendations = [];
+
+            if (vocab === 'beginner') score += 20;
+            else if (vocab === 'intermediate') score += 40;
+            else score += 60;
+
+            score += tenses.length * 5;
+
+            if (score < 40) {
+                level = 'مبتدئ';
+                levelEn = 'beginner';
+                recommendations = [
+                    'ابدأ بتعلم الكلمات الأساسية (تحيات، أرقام، ألوان)',
+                    'ركز على الأفعال الشائعة: eat, drink, sleep, go',
+                    'تدرب على الأزمنة: Present Simple فقط'
+                ];
+            } else if (score < 70) {
+                level = 'متوسط';
+                levelEn = 'intermediate';
+                recommendations = [
+                    'تعلم 10 كلمات جديدة يومياً',
+                    'ركز على الأزمنة: Past Continuous, Present Perfect',
+                    'اقرأ القصص القصيرة وحاول فهمها'
+                ];
+            } else {
+                level = 'متقدم';
+                levelEn = 'advanced';
+                recommendations = [
+                    'تعلم الـ Phrasal Verbs الشائعة',
+                    'ركز على الأزمنة المعقدة: Past Perfect, Future Perfect',
+                    'اقرأ مقالات طويلة وحاول تلخيصها'
+                ];
+            }
+
+            // عرض النتائج
+            document.getElementById('resultLevel').textContent = level;
+            document.getElementById('resultVocab').textContent = 
+                vocab === 'beginner' ? 'مبتدئ' : vocab === 'intermediate' ? 'متوسط' : 'متقدم';
+            document.getElementById('resultTenses').textContent = tenses.length;
+            document.getElementById('resultScore').textContent = Math.round(score) + '%';
+
+            const recList = document.getElementById('recommendations');
+            recList.innerHTML = recommendations.map(r => 
+                `<li><i class="fas fa-check-circle"></i><span>${r}</span></li>`
+            ).join('');
+
+            userData.level = level;
+            userData.levelEn = levelEn;
+            userData.score = score;
+
+            // الانتقال للنتيجة
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('stepLine2').classList.add('active');
+            document.getElementById('step3').classList.add('active');
+            
+            document.getElementById('section2').classList.remove('active');
+            document.getElementById('section3').classList.add('active');
+        };
+
+        // حفظ المستوى في Firebase
+        window.saveLevel = async function() {
+            const btn = document.getElementById('saveBtn');
+            btn.innerHTML = 'جاري الحفظ... <span class="loading-spinner"></span>';
+            btn.disabled = true;
+
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const result = await updateUserLevel(currentUser.uid, {
+                level: userData.levelEn,
+                currentLevel: userData.levelEn,
+                wordsLevel: userData.vocab,
+                tenses: userData.tenses,
+                score: userData.score
+            });
+
+            if (result.success) {
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('حدث خطأ في حفظ المستوى');
+                btn.innerHTML = '<i class="fas fa-check"></i> حفظ وبدء التعلم';
+                btn.disabled = false;
+            }
+        };
+    </script>
+</body>
+                      </html>
