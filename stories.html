@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineLingua | قصص قصيرة</title>
+    
+    <!-- حماية الصفحة -->
+    <script src="auth-check.js"></script>
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* نفس الـ style اللي عندك */
         .stories-container {
             max-width: 1000px;
             margin: 100px auto 2rem;
@@ -247,7 +252,6 @@
             box-shadow: var(--shadow-lg);
         }
 
-        /* نافذة القصة الكاملة */
         .story-modal {
             position: fixed;
             top: 0;
@@ -509,7 +513,7 @@
                 <li><a href="dashboard.html">لوحة التحكم</a></li>
             </ul>
             <div class="nav-buttons">
-                <a href="register.html" class="btn btn-primary">تسجيل الدخول</a>
+                <div class="theme-toggle" id="themeToggle"></div>
             </div>
         </div>
     </nav>
@@ -549,6 +553,50 @@
     <script src="translations.js"></script>
     <script src="theme.js"></script>
     <script>
+        // نظام تقدم القراءة
+        class ReadingProgress {
+            constructor() {
+                this.completedStories = JSON.parse(localStorage.getItem('completedStories')) || [];
+                this.storyProgress = JSON.parse(localStorage.getItem('storyProgress')) || {};
+            }
+
+            markAsRead(storyId) {
+                if (!this.completedStories.includes(storyId)) {
+                    this.completedStories.push(storyId);
+                    localStorage.setItem('completedStories', JSON.stringify(this.completedStories));
+                }
+            }
+
+            saveProgress(storyId, questionIndex, correct) {
+                if (!this.storyProgress[storyId]) {
+                    this.storyProgress[storyId] = {
+                        attempts: 0,
+                        correct: 0,
+                        questions: []
+                    };
+                }
+                
+                this.storyProgress[storyId].attempts++;
+                if (correct) {
+                    this.storyProgress[storyId].correct++;
+                }
+                
+                this.storyProgress[storyId].questions[questionIndex] = correct;
+                localStorage.setItem('storyProgress', JSON.stringify(this.storyProgress));
+            }
+
+            getProgress(storyId) {
+                return this.storyProgress[storyId] || { attempts: 0, correct: 0, questions: [] };
+            }
+
+            getCompletionRate(storyId) {
+                const progress = this.getProgress(storyId);
+                const story = getStoryById(storyId);
+                if (!story || progress.attempts === 0) return 0;
+                return (progress.correct / story.questions.length) * 100;
+            }
+        }
+
         let currentFilter = 'all';
         let currentStory = null;
         let selectedAnswers = {};
@@ -584,7 +632,7 @@
                     <div class="story-card">
                         <div class="story-header">
                             <img src="${story.image}" alt="${story.title}">
-                            <span class="story-level-badge ${story.level}">${story.level}</span>
+                            <span class="story-level-badge ${story.level === 'مبتدئ' ? 'beginner' : story.level === 'متوسط' ? 'intermediate' : 'advanced'}">${story.level}</span>
                         </div>
                         <div class="story-content">
                             <h2 class="story-title">${story.title}</h2>
@@ -724,7 +772,6 @@
                 const selected = selectedAnswers[index];
                 const explanation = document.getElementById(`explanation-${index}`);
                 
-                // إزالة التحديدات السابقة
                 const questionDiv = document.getElementById(`question-${index}`);
                 questionDiv.querySelectorAll('.option').forEach(opt => {
                     opt.classList.remove('correct', 'wrong');
@@ -738,10 +785,8 @@
                     questionDiv.querySelectorAll('.option')[q.correct].classList.add('correct');
                 }
                 
-                // إظهار الشرح
                 explanation.classList.add('show');
                 
-                // حفظ التقدم
                 readingProgress.saveProgress(currentStory.id, index, selected === q.correct);
             });
             
@@ -767,6 +812,9 @@
                     </div>
                 `;
             }
+            
+            // تحديث قائمة القصص (لتحديث نسبة التقدم)
+            displayStories();
         }
 
         function playWord(word) {
@@ -794,7 +842,7 @@
                 <div class="story-card">
                     <div class="story-header">
                         <img src="${story.image}" alt="${story.title}">
-                        <span class="story-level-badge ${story.level}">${story.level}</span>
+                        <span class="story-level-badge ${story.level === 'مبتدئ' ? 'beginner' : story.level === 'متوسط' ? 'intermediate' : 'advanced'}">${story.level}</span>
                     </div>
                     <div class="story-content">
                         <h2 class="story-title">${story.title}</h2>
@@ -816,4 +864,4 @@
         });
     </script>
 </body>
-</html>
+        </html>
