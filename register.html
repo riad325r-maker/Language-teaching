@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLingua | تسجيل وتحديد المستوى</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .register-container {
+            max-width: 800px;
+            margin: 100px auto 2rem;
+            padding: 2rem;
+        }
+        
+        .register-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .register-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .register-header p {
+            color: var(--text-secondary);
+        }
+        
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--bg-tertiary);
+            border: 3px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .step.active .step-number {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .step.completed .step-number {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .step.completed .step-number::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+        }
+        
+        .step-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .step-line {
+            width: 120px;
+            height: 3px;
+            background-color: var(--border-light);
+            margin: 0 1rem;
+            transition: var(--transition);
+        }
+        
+        .step-line.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .step-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-section {
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+        }
+        
+        .form-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        
+        .form-section h3 i {
+            color: var(--primary);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .form-group label i {
+            color: var(--primary);
+            margin-left: 0.5rem;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            transition: var(--transition);
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .input-group input:focus + i {
+            color: var(--primary);
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .option-card {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .option-card input[type="radio"],
+        .option-card input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .option-card-content {
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            background-color: var(--bg-primary);
+            transition: var(--transition);
+            text-align: center;
+        }
+        
+        .option-card:hover .option-card-content {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .option-card input[type="radio"]:checked + .option-card-content,
+        .option-card input[type="checkbox"]:checked + .option-card-content {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+        }
+        
+        .option-card input[type="radio"]:checked + .option-card-content i,
+        .option-card input[type="checkbox"]:checked + .option-card-content i {
+            color: var(--primary);
+        }
+        
+        .option-card-content i {
+            font-size: 2rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .option-card-content span {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .quick-test {
+            background-color: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-top: 1rem;
+        }
+        
+        .quick-test p {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .result-box {
+            text-align: center;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-lg);
+            color: white;
+            margin-bottom: 2rem;
+        }
+        
+        .result-box h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .result-stat {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(10px);
+        }
+        
+        .result-stat .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        
+        .result-stat .label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .recommendations-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .recommendations-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+        
+        .recommendations-list li i {
+            color: var(--success);
+        }
+        
+        .verification-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <span>CineLingua</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">الرئيسية</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="index.html" class="btn btn-outline">
+                    <i class="fas fa-arrow-right"></i>
+                    العودة
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-header">
+                <h1>مرحباً بك! 👋</h1>
+                <p>خطوتين فقط ونعرف مستواك بالضبط</p>
+            </div>
+
+            <!-- شريط التقدم -->
+            <div class="progress-steps">
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <span class="step-label">المعلومات الأساسية</span>
+                </div>
+                <div class="step-line" id="stepLine1"></div>
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <span class="step-label">تحديد المستوى</span>
+                </div>
+                <div class="step-line" id="stepLine2"></div>
+                <div class="step" id="step3">
+                    <div class="step-number">3</div>
+                    <span class="step-label">النتيجة</span>
+                </div>
+            </div>
+
+            <!-- الخطوة 1: إنشاء حساب -->
+            <div class="step-content active" id="step1Content">
+                <form id="registerForm" onsubmit="event.preventDefault();">
+                    <div class="form-section">
+                        <h3>
+                            <i class="fas fa-user-circle"></i>
+                            أنشئ حسابك المجاني
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-user"></i>
+                                    الاسم الأول
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="firstName" placeholder="أحمد" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-user"></i>
+                                    اسم العائلة
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="lastName" placeholder="محمد" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-envelope"></i>
+                                البريد الإلكتروني
+                            </label>
+                            <div class="input-group">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" placeholder="ahmed@example.com" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-lock"></i>
+                                    كلمة المرور
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="password" placeholder="********" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-lock"></i>
+                                    تأكيد كلمة المرور
+                                </label>
+                                <div class="input-group">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="confirmPassword" placeholder="********" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="verification-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            معلوماتك آمنة ومشفرة
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" onclick="goToStep2()">
+                            التالي
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- الخطوة 2: تحديد المستوى -->
+            <div class="step-content" id="step2Content">
+                <form id="levelTestForm">
+                    <!-- عدد الكلمات -->
+                    <div class="form-section">
+                        <h3>
+                            <i class="fas fa-book"></i>
+                            كم كلمة تقريباً تعرف؟
+                        </h3>
+                        
+                        <div class="options-grid">
+                            <label class="option-card">
+                                <input type="radio" name="wordsLevel" value="beginner" required>
+                                <div class="option-card-content">
+                                    <i class="fas fa-seedling"></i>
+                                    <span>أقل من 500</span>
+                                    <small style="display: block; color: var(--text-tertiary); margin-top: 0.25rem;">مبتدئ</small>
+                                </div>
+                            </label>
+                            
+                            <label class="option-card">
+                                <input type="radio" name="wordsLevel" value="intermediate">
+                                <div class="option-card-content">
+                                    <i class="fas fa-tree"></i>
+                                    <span>500 - 1500</span>
+                                    <small style="display: block; color: var(--text-tertiary); margin-top: 0.25rem;">متوسط</small>
+                                </div>
+                            </label>
+                            
+                            <label class="option-card">
+                                <input type="radio" name="wordsLevel" value="advanced">
+                                <div class="option-card-content">
+                                    <i class="fas fa-crown"></i>
+                                    <span>أكثر من 1500</span>
+                                    <small style="display: block; color: var(--text-tertiary); margin-top: 0.25rem;">متقدم</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- الأزمنة -->
+                    <div class="form-section">
+                        <h3>
+                            <i class="fas fa-clock"></i>
+                            الأزمنة التي تعرفها
+                        </h3>
+                        
+                        <div class="options-grid">
+                            <label class="option-card">
+                                <input type="checkbox" name="tense" value="present-simple">
+                                <div class="option-card-content">
+                                    <span>Present Simple</span>
+                                    <small>المضارع البسيط</small>
+                                </div>
+                            </label>
+                            
+                            <label class="option-card">
+                                <input type="checkbox" name="tense" value="present-continuous">
+                                <div class="option-card-content">
+                                    <span>Present Continuous</span>
+                                    <small>المضارع المستمر</small>
+                                </div>
+                            </label>
+                            
+                            <label class="option-card">
+                                <input type="checkbox" name="tense" value="past-simple">
+                                <div class="option-card-content">
+                                    <span>Past Simple</span>
+                                    <small>الماضي البسيط</small>
+                                </div>
+                            </label>
+                            
+                            <label class="option-card">
+                                <input type="checkbox" name="tense" value="past-continuous">
+                                <div class="option-card-content">
+                                    <span>Past Continuous</span>
+                                    <small>الماضي المستمر</small>
+                                </div>
+                            </label>
+                            
+                            <label class="option-card">
+                                <input type="checkbox" name="tense" value="present-perfect">
+                                <div class="option-card-content">
+                                    <span>Present Perfect</span>
+                                    <small>المضارع التام</small>
+                                </div>
+                            </label>
+                            
+                            <label class="option-card">
+                                <input type="checkbox" name="tense" value="future">
+                                <div class="option-card-content">
+                                    <span>Future</span>
+                                    <small>المستقبل</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- اختبار سريع -->
+                    <div class="form-section">
+                        <h3>
+                            <i class="fas fa-question-circle"></i>
+                            اختبار سريع
+                        </h3>
+                        
+                        <div class="quick-test">
+                            <p>"I have been studying English for two years"</p>
+                            
+                            <div class="options-grid" style="grid-template-columns: 1fr;">
+                                <label class="option-card">
+                                    <input type="radio" name="quickTest" value="a" required>
+                                    <div class="option-card-content">
+                                        <span>أدرس الإنجليزية منذ سنتين</span>
+                                    </div>
+                                </label>
+                                
+                                <label class="option-card">
+                                    <input type="radio" name="quickTest" value="b">
+                                    <div class="option-card-content">
+                                        <span>درست الإنجليزية لمدة سنتين</span>
+                                    </div>
+                                </label>
+                                
+                                <label class="option-card">
+                                    <input type="radio" name="quickTest" value="c">
+                                    <div class="option-card-content">
+                                        <span>سأدرس الإنجليزية سنتين</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="goToStep1()">
+                            <i class="fas fa-arrow-right"></i>
+                            السابق
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="calculateLevel()">
+                            عرض نتيجتي
+                            <i class="fas fa-chart-line"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- الخطوة 3: النتيجة -->
+            <div class="step-content" id="step3Content">
+                <div class="result-box" id="resultBox">
+                    <h2 id="resultLevel">مستوى متوسط</h2>
+                    <p id="resultMessage">لديك أساس جيد. ركز على الأزمنة والمحادثات اليومية.</p>
+                </div>
+
+                <div class="result-details">
+                    <div class="result-stat">
+                        <div class="number" id="resultWords">500</div>
+                        <div class="label">كلمة</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="number" id="resultTenses">4</div>
+                        <div class="label">أزمنة</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="number" id="resultScore">75%</div>
+                        <div class="label">دقة</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>
+                        <i class="fas fa-lightbulb"></i>
+                        توصيات مخصصة لك
+                    </h3>
+                    
+                    <ul class="recommendations-list" id="recommendationsList">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>ابدأ بمشاهدة فيديوهات المستوى المتوسط</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>ركز على تعلم 5 كلمات جديدة يومياً</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>تدرب على الأزمنة: Past Continuous, Present Perfect</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goToStep2()">
+                        <i class="fas fa-arrow-right"></i>
+                        إعادة الاختبار
+                    </button>
+                    <a href="dashboard.html" class="btn btn-primary">
+                        ابدأ رحلتك
+                        <i class="fas fa-rocket"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userData = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            wordsLevel: '',
+            tenses: [],
+            quickTest: ''
+        };
+
+        function goToStep2() {
+            // التحقق من صحة البيانات
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!firstName || !lastName || !email || !password) {
+                showAlert('الرجاء ملء جميع الحقول', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAlert('كلمة المرور غير متطابقة', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showAlert('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+                return;
+            }
+
+            // حفظ البيانات
+            userData.firstName = firstName;
+            userData.lastName = lastName;
+            userData.email = email;
+
+            // تحديث الواجهة
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('stepLine1').classList.add('active');
+            document.getElementById('step2').classList.add('active');
+            
+            document.getElementById('step1Content').classList.remove('active');
+            document.getElementById('step2Content').classList.add('active');
+        }
+
+        function goToStep1() {
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step1').classList.remove('completed');
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('stepLine1').classList.remove('active');
+            
+            document.getElementById('step2Content').classList.remove('active');
+            document.getElementById('step1Content').classList.add('active');
+        }
+
+        function calculateLevel() {
+            // جمع البيانات
+            const wordsLevel = document.querySelector('input[name="wordsLevel"]:checked')?.value;
+            const tenses = Array.from(document.querySelectorAll('input[name="tense"]:checked')).map(cb => cb.value);
+            const quickTest = document.querySelector('input[name="quickTest"]:checked')?.value;
+
+            if (!wordsLevel || !quickTest) {
+                showAlert('الرجاء إكمال جميع الأسئلة', 'error');
+                return;
+            }
+
+            // حفظ البيانات
+            userData.wordsLevel = wordsLevel;
+            userData.tenses = tenses;
+            userData.quickTest = quickTest;
+
+            // حساب المستوى
+            let level = '';
+            let message = '';
+            let recommendations = [];
+            let score = 0;
+
+            // تقييم الكلمات
+            if (wordsLevel === 'beginner') score += 20;
+            else if (wordsLevel === 'intermediate') score += 40;
+            else score += 60;
+
+            // تقييم الأزمنة
+            score += tenses.length * 5;
+
+            // تقييم الاختبار السريع
+            if (quickTest === 'a') score += 20;
+
+            // تحديد المستوى
+            if (score < 40) {
+                level = 'مبتدئ';
+                message = 'تبدأ رحلتك مع الإنجليزية. لا تقلق، كلنا بدأنا من الصفر!';
+                recommendations = [
+                    'ابدأ بتعلم الكلمات الأساسية (تحيات، أرقام، ألوان)',
+                    'ركز على الأفعال الشائعة: eat, drink, sleep, go',
+                    'تدرب على الأزمنة: Present Simple فقط',
+                    'شاهد فيديوهات المستوى المبتدئ يومياً'
+                ];
+            } else if (score < 70) {
+                level = 'متوسط';
+                message = 'لديك أساس جيد. ركز على الأزمنة والمحادثات اليومية.';
+                recommendations = [
+                    'تعلم 10 كلمات جديدة يومياً',
+                    'ركز على الأزمنة: Past Continuous, Present Perfect',
+                    'اقرأ القصص القصيرة وحاول فهمها',
+                    'تدرب على المحادثات اليومية'
+                ];
+            } else {
+                level = 'متقدم';
+                message = 'ممتاز! أنت في المستوى المتقدم. ركز على التفاصيل الدقيقة.';
+                recommendations = [
+                    'تعلم الـ Phrasal Verbs الشائعة',
+                    'ركز على الأزمنة المعقدة: Past Perfect, Future Perfect',
+                    'اقرأ مقالات طويلة وحاول تلخيصها',
+                    'تدرب على الكتابة الأكاديمية'
+                ];
+            }
+
+            // عرض النتائج
+            document.getElementById('resultLevel').textContent = `مستوى ${level}`;
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('resultWords').textContent = 
+                wordsLevel === 'beginner' ? '500' : wordsLevel === 'intermediate' ? '1000' : '2000+';
+            document.getElementById('resultTenses').textContent = tenses.length;
+            document.getElementById('resultScore').textContent = Math.round(score) + '%';
+
+            // عرض التوصيات
+            const recommendationsList = document.getElementById('recommendationsList');
+            recommendationsList.innerHTML = recommendations.map(rec => `
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>${rec}</span>
+                </li>
+            `).join('');
+
+            // حفظ البيانات في localStorage
+            userData.level = level;
+            userData.score = score;
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            // الانتقال للخطوة 3
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('stepLine2').classList.add('active');
+            document.getElementById('step3').classList.add('active');
+            
+            document.getElementById('step2Content').classList.remove('active');
+            document.getElementById('step3Content').classList.add('active');
+        }
+
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            alert.style.position = 'fixed';
+            alert.style.top = '100px';
+            alert.style.left = '50%';
+            alert.style.transform = 'translateX(-50%)';
+            alert.style.zIndex = '9999';
+            alert.style.minWidth = '300px';
+            alert.style.textAlign = 'center';
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

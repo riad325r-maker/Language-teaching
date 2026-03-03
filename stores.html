@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLingua | قصص قصيرة</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .stories-container {
+            max-width: 1000px;
+            margin: 100px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .level-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--border-light);
+            background: transparent;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: white;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-full);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+        }
+
+        .story-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid transparent;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .story-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .story-header {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .story-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .story-card:hover .story-header img {
+            transform: scale(1.05);
+        }
+
+        .story-level-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--dark);
+        }
+
+        .story-level-badge.beginner {
+            background-color: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .story-level-badge.intermediate {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .story-level-badge.advanced {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .story-content {
+            padding: 2rem;
+        }
+
+        .story-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .story-arabic-title {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .story-preview {
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border-right: 4px solid var(--primary);
+        }
+
+        .story-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .story-word-chip {
+            background-color: var(--bg-tertiary);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .story-word-chip:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .story-word-chip i {
+            font-size: 0.75rem;
+        }
+
+        .story-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--border-light);
+        }
+
+        .story-stats {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .story-stats i {
+            color: var(--primary);
+        }
+
+        .read-more-btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .read-more-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* نافذة القصة الكاملة */
+        .story-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .story-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .story-modal-content {
+            background-color: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.5s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .story-modal-header {
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-primary);
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .story-modal-title h2 {
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .story-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .story-modal-close:hover {
+            color: var(--danger);
+        }
+
+        .story-modal-body {
+            padding: 2rem;
+        }
+
+        .story-full-content {
+            line-height: 2;
+            margin-bottom: 2rem;
+        }
+
+        .story-full-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .story-arabic-full {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin: 2rem 0;
+            line-height: 2;
+            border-right: 4px solid var(--primary);
+        }
+
+        .new-words-section {
+            background-color: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin: 2rem 0;
+            border: 2px solid var(--border-light);
+        }
+
+        .new-words-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .new-words-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .new-word-item {
+            background-color: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .new-word {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .new-word-arabic {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .questions-section {
+            margin: 2rem 0;
+        }
+
+        .questions-section h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .question-item {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1.5rem;
+        }
+
+        .question-text {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .options {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .option {
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background-color: var(--bg-hover);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.1), 
+                rgba(236, 72, 153, 0.1));
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .option.wrong {
+            border-color: var(--danger);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .explanation {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: var(--bg-primary);
+            border-radius: var(--radius-md);
+            border-right: 4px solid var(--info);
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        .btn-check {
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-check:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .completion-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--success);
+            color: white;
+            border-radius: var(--radius-full);
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <span>CineLingua</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="lessons.html">الكلمات</a></li>
+                <li><a href="stories.html" class="active">القصص</a></li>
+                <li><a href="quiz.html">الاختبارات</a></li>
+                <li><a href="dashboard.html">لوحة التحكم</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="register.html" class="btn btn-primary">تسجيل الدخول</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="stories-container">
+        <div class="page-header">
+            <h1>📖 قصص قصيرة لتحسين القراءة</h1>
+            <p>اقرأ القصص، تعلم كلمات جديدة، واختبر فهمك</p>
+        </div>
+
+        <!-- البحث -->
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="ابحث عن قصة...">
+        </div>
+
+        <!-- فلتر المستوى -->
+        <div class="level-filter">
+            <button class="filter-btn active" onclick="filterStories('all')">الكل</button>
+            <button class="filter-btn" onclick="filterStories('مبتدئ')">مبتدئ</button>
+            <button class="filter-btn" onclick="filterStories('متوسط')">متوسط</button>
+            <button class="filter-btn" onclick="filterStories('متقدم')">متقدم</button>
+        </div>
+
+        <!-- قائمة القصص -->
+        <div id="storiesList"></div>
+    </div>
+
+    <!-- نافذة القصة الكاملة -->
+    <div class="story-modal" id="storyModal">
+        <div class="story-modal-content" id="storyModalContent">
+            <!-- المحتوى يتحط هنا -->
+        </div>
+    </div>
+
+    <script src="stories-data.js"></script>
+    <script src="translations.js"></script>
+    <script src="theme.js"></script>
+    <script>
+        let currentFilter = 'all';
+        let currentStory = null;
+        let selectedAnswers = {};
+        let readingProgress = new ReadingProgress();
+
+        // تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            displayStories();
+        });
+
+        function filterStories(level) {
+            currentFilter = level;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            displayStories();
+        }
+
+        function displayStories() {
+            let stories = STORIES;
+            if (currentFilter !== 'all') {
+                stories = STORIES.filter(s => s.level === currentFilter);
+            }
+
+            const list = document.getElementById('storiesList');
+            
+            list.innerHTML = stories.map(story => {
+                const progress = readingProgress.getCompletionRate(story.id);
+                return `
+                    <div class="story-card">
+                        <div class="story-header">
+                            <img src="${story.image}" alt="${story.title}">
+                            <span class="story-level-badge ${story.level}">${story.level}</span>
+                        </div>
+                        <div class="story-content">
+                            <h2 class="story-title">${story.title}</h2>
+                            <div class="story-arabic-title">${story.arabicTitle}</div>
+                            
+                            <div class="story-preview">
+                                ${story.content.substring(0, 150)}...
+                            </div>
+                            
+                            <div class="story-words">
+                                ${story.words.slice(0, 5).map(word => `
+                                    <span class="story-word-chip" onclick="playWord('${word}')">
+                                        <i class="fas fa-volume-up"></i>
+                                        ${word}
+                                    </span>
+                                `).join('')}
+                            </div>
+                            
+                            <div class="story-footer">
+                                <div class="story-stats">
+                                    <span><i class="fas fa-book-open"></i> ${story.words.length} كلمة</span>
+                                    <span><i class="fas fa-question-circle"></i> ${story.questions.length} سؤال</span>
+                                    ${progress > 0 ? `
+                                        <span><i class="fas fa-check-circle" style="color: var(--success);"></i> ${Math.round(progress)}%</span>
+                                    ` : ''}
+                                </div>
+                                <button class="read-more-btn" onclick="openStory(${story.id})">
+                                    اقرأ القصة
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openStory(storyId) {
+            currentStory = getStoryById(storyId);
+            if (!currentStory) return;
+
+            const modal = document.getElementById('storyModal');
+            const content = document.getElementById('storyModalContent');
+            
+            content.innerHTML = `
+                <div class="story-modal-header">
+                    <div class="story-modal-title">
+                        <h2>${currentStory.title}</h2>
+                        <p>${currentStory.arabicTitle}</p>
+                    </div>
+                    <button class="story-modal-close" onclick="closeStory()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="story-modal-body">
+                    <div class="story-full-content">
+                        ${currentStory.content.split('\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                    
+                    <div class="story-arabic-full">
+                        ${currentStory.arabicContent}
+                    </div>
+                    
+                    <div class="new-words-section">
+                        <h3>
+                            <i class="fas fa-graduation-cap"></i>
+                            كلمات جديدة في القصة
+                        </h3>
+                        <div class="new-words-grid">
+                            ${currentStory.newWords.map(word => `
+                                <div class="new-word-item">
+                                    <div class="new-word">${word.word}</div>
+                                    <div class="new-word-arabic">${word.arabic}</div>
+                                    <button class="action-btn" style="margin-top: 0.5rem;" 
+                                            onclick="playWord('${word.word}')">
+                                        <i class="fas fa-volume-up"></i> استمع
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="questions-section">
+                        <h3>📝 اختبر فهمك</h3>
+                        ${currentStory.questions.map((q, index) => `
+                            <div class="question-item" id="question-${index}">
+                                <div class="question-text">${index + 1}. ${q.question}</div>
+                                <div class="options">
+                                    ${q.options.map((opt, optIndex) => `
+                                        <div class="option" onclick="selectOption(${index}, ${optIndex})">
+                                            <span class="option-letter">${String.fromCharCode(65 + optIndex)}</span>
+                                            <span>${opt}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="explanation" id="explanation-${index}">
+                                    <i class="fas fa-info-circle"></i>
+                                    ${q.explanation}
+                                </div>
+                            </div>
+                        `).join('')}
+                        
+                        <button class="btn-check" onclick="checkAnswers()">
+                            تحقق من الإجابات
+                        </button>
+                        
+                        <div id="completionMessage" style="display: none;"></div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            selectedAnswers = {};
+        }
+
+        function closeStory() {
+            document.getElementById('storyModal').classList.remove('active');
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            selectedAnswers[questionIndex] = optionIndex;
+            
+            const questionDiv = document.getElementById(`question-${questionIndex}`);
+            questionDiv.querySelectorAll('.option').forEach((opt, idx) => {
+                opt.classList.remove('selected');
+                if (idx === optionIndex) {
+                    opt.classList.add('selected');
+                }
+            });
+        }
+
+        function checkAnswers() {
+            let correct = 0;
+            
+            currentStory.questions.forEach((q, index) => {
+                const selected = selectedAnswers[index];
+                const explanation = document.getElementById(`explanation-${index}`);
+                
+                // إزالة التحديدات السابقة
+                const questionDiv = document.getElementById(`question-${index}`);
+                questionDiv.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('correct', 'wrong');
+                });
+                
+                if (selected === q.correct) {
+                    correct++;
+                    questionDiv.querySelectorAll('.option')[selected].classList.add('correct');
+                } else if (selected !== undefined) {
+                    questionDiv.querySelectorAll('.option')[selected].classList.add('wrong');
+                    questionDiv.querySelectorAll('.option')[q.correct].classList.add('correct');
+                }
+                
+                // إظهار الشرح
+                explanation.classList.add('show');
+                
+                // حفظ التقدم
+                readingProgress.saveProgress(currentStory.id, index, selected === q.correct);
+            });
+            
+            const total = currentStory.questions.length;
+            const percentage = (correct / total) * 100;
+            
+            const message = document.getElementById('completionMessage');
+            message.style.display = 'block';
+            
+            if (percentage === 100) {
+                readingProgress.markAsRead(currentStory.id);
+                message.innerHTML = `
+                    <div class="completion-badge">
+                        <i class="fas fa-trophy"></i>
+                        أحسنت! أجبت على جميع الأسئلة بشكل صحيح 🎉
+                    </div>
+                `;
+            } else {
+                message.innerHTML = `
+                    <div class="completion-badge" style="background-color: var(--warning);">
+                        <i class="fas fa-redo-alt"></i>
+                        أجبت على ${correct} من ${total} بشكل صحيح. حاول مرة أخرى!
+                    </div>
+                `;
+            }
+        }
+
+        function playWord(word) {
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // البحث
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value;
+            if (query.length < 2) {
+                displayStories();
+                return;
+            }
+
+            const results = STORIES.filter(story => 
+                story.title.toLowerCase().includes(query.toLowerCase()) ||
+                story.arabicTitle.includes(query) ||
+                story.content.toLowerCase().includes(query.toLowerCase())
+            );
+
+            const list = document.getElementById('storiesList');
+            list.innerHTML = results.map(story => `
+                <div class="story-card">
+                    <div class="story-header">
+                        <img src="${story.image}" alt="${story.title}">
+                        <span class="story-level-badge ${story.level}">${story.level}</span>
+                    </div>
+                    <div class="story-content">
+                        <h2 class="story-title">${story.title}</h2>
+                        <div class="story-arabic-title">${story.arabicTitle}</div>
+                        <button class="read-more-btn" onclick="openStory(${story.id})">
+                            اقرأ القصة
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        });
+
+        // إغلاق النافذة بالضغط على ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeStory();
+            }
+        });
+    </script>
+</body>
+</html>

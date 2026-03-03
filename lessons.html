@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLingua | الكلمات والجمل</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .lessons-container {
+            max-width: 1200px;
+            margin: 100px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-badge {
+            display: flex;
+            gap: 1rem;
+            background-color: var(--bg-card);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-light);
+        }
+
+        .stat-badge-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-badge-item i {
+            color: var(--primary);
+        }
+
+        .stat-badge-item span {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .search-section {
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-full);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .level-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background-color: var(--bg-card);
+            padding: 0.5rem;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-light);
+        }
+
+        .level-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .level-tab:hover {
+            color: var(--primary);
+            background-color: var(--bg-hover);
+        }
+
+        .level-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .categories-filter {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .category-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border-light);
+            background: transparent;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .category-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 0.5rem;
+            margin-right: auto;
+        }
+
+        .view-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border-light);
+            background: transparent;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .view-btn:hover,
+        .view-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .words-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+            transition: var(--transition);
+        }
+
+        .words-grid.list-view {
+            grid-template-columns: 1fr;
+        }
+
+        .word-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border: 2px solid transparent;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .word-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transform: translateX(-100%);
+            transition: var(--transition);
+        }
+
+        .word-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .word-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .word-card.saved {
+            border-color: var(--success);
+            background: linear-gradient(135deg, 
+                rgba(16, 185, 129, 0.05), 
+                rgba(16, 185, 129, 0.1));
+        }
+
+        .word-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .word-main {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .word-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .word-text {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .word-arabic {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            background-color: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+        }
+
+        .word-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .word-badge.beginner {
+            background-color: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .word-badge.intermediate {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .word-badge.advanced {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .word-pronunciation {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--bg-tertiary);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            margin: 1rem 0;
+            width: fit-content;
+            color: var(--text-secondary);
+        }
+
+        .word-pronunciation i {
+            color: var(--primary);
+        }
+
+        .word-example {
+            background-color: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            border-right: 4px solid var(--primary);
+        }
+
+        .example-english {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .example-arabic {
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+
+        .word-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: var(--radius-md);
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .action-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .action-btn.saved {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .phrases-section {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.05), 
+                rgba(236, 72, 153, 0.05));
+            border-radius: var(--radius-lg);
+        }
+
+        .phrases-section h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .phrases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .phrase-card {
+            background-color: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .phrase-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+
+        .phrase-english {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .phrase-arabic {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .phrase-pronunciation {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            margin-bottom: 0.5rem;
+        }
+
+        .phrase-situation {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--bg-tertiary);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border-light);
+            background: transparent;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .word-of-day {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--primary);
+            max-width: 300px;
+            animation: slideIn 0.5s ease;
+            z-index: 100;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .word-of-day-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .word-of-day-content {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .word-of-day-close {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .level-tabs {
+                width: 100%;
+            }
+            
+            .level-tab {
+                flex: 1;
+                text-align: center;
+            }
+            
+            .words-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <span>CineLingua</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="lessons.html" class="active">الكلمات</a></li>
+                <li><a href="stories.html">القصص</a></li>
+                <li><a href="quiz.html">الاختبارات</a></li>
+                <li><a href="dashboard.html">لوحة التحكم</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <!-- زر الثيم من theme.js -->
+                <a href="register.html" class="btn btn-primary">تسجيل الدخول</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lessons-container">
+        <div class="page-header">
+            <h1>📚 تعلم الكلمات والجمل</h1>
+            <div class="stats-badge">
+                <div class="stat-badge-item">
+                    <i class="fas fa-book"></i>
+                    <span id="totalWords">0</span> كلمة
+                </div>
+                <div class="stat-badge-item">
+                    <i class="fas fa-bookmark"></i>
+                    <span id="savedCount">0</span> محفوظة
+                </div>
+            </div>
+        </div>
+
+        <!-- البحث -->
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="ابحث عن كلمة...">
+            </div>
+        </div>
+
+        <!-- التصفية -->
+        <div class="filter-section">
+            <div class="level-tabs">
+                <button class="level-tab active" onclick="loadLevel('beginner')">مبتدئ</button>
+                <button class="level-tab" onclick="loadLevel('intermediate')">متوسط</button>
+                <button class="level-tab" onclick="loadLevel('advanced')">متقدم</button>
+            </div>
+
+            <div class="categories-filter" id="categoriesFilter">
+                <!-- التصنيفات تتحط هنا -->
+            </div>
+
+            <div class="view-options">
+                <button class="view-btn active" onclick="toggleView('grid')" title="عرض شبكي">
+                    <i class="fas fa-grid-2"></i>
+                </button>
+                <button class="view-btn" onclick="toggleView('list')" title="عرض قائمة">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- شبكة الكلمات -->
+        <div class="words-grid" id="wordsGrid"></div>
+
+        <!-- ترقيم الصفحات -->
+        <div class="pagination" id="pagination"></div>
+
+        <!-- قسم الجمل اليومية -->
+        <div class="phrases-section">
+            <h2>
+                <i class="fas fa-comments"></i>
+                جمل يومية
+            </h2>
+            <div class="phrases-grid" id="phrasesGrid"></div>
+        </div>
+    </div>
+
+    <!-- كلمة اليوم -->
+    <div class="word-of-day" id="wordOfDay">
+        <button class="word-of-day-close" onclick="closeWordOfDay()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="word-of-day-header">
+            <i class="fas fa-star"></i>
+            <span>كلمة اليوم</span>
+        </div>
+        <div class="word-of-day-content" id="wordOfDayWord"></div>
+        <div class="word-of-day-arabic" id="wordOfDayArabic"></div>
+        <button class="action-btn" style="margin-top: 0.5rem;" onclick="playWord(document.getElementById('wordOfDayWord').textContent)">
+            <i class="fas fa-volume-up"></i> استمع
+        </button>
+    </div>
+
+    <script src="words-data.js"></script>
+    <script src="translations.js"></script>
+    <script src="theme.js"></script>
+    <script>
+        // المتغيرات العامة
+        let currentLevel = 'beginner';
+        let currentCategory = 'all';
+        let currentView = 'grid';
+        let savedWords = JSON.parse(localStorage.getItem('savedWords')) || [];
+        let currentPage = 1;
+        const itemsPerPage = 12;
+        let currentWords = [];
+
+        // تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTotalWords();
+            loadLevel('beginner');
+            loadDailyPhrases();
+            showWordOfDay();
+            updateSavedCount();
+        });
+
+        function updateTotalWords() {
+            const total = (WORDS_DATA.beginmer?.length || 0) + 
+                         (WORDS_DATA.intermediate?.length || 0) + 
+                         (WORDS_DATA.advanced?.length || 0);
+            document.getElementById('totalWords').textContent = total;
+        }
+
+        function updateSavedCount() {
+            document.getElementById('savedCount').textContent = savedWords.length;
+        }
+
+        function loadLevel(level) {
+            currentLevel = level;
+            currentPage = 1;
+            
+            // تحديث التبويبات
+            document.querySelectorAll('.level-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // جلب الكلمات
+            currentWords = getWordsByLevel(level);
+            
+            // استخراج التصنيفات
+            const categories = ['all', ...new Set(currentWords.map(w => w.category))];
+            updateCategories(categories);
+
+            // عرض الكلمات
+            displayWords(currentWords);
+        }
+
+        function updateCategories(categories) {
+            const container = document.getElementById('categoriesFilter');
+            container.innerHTML = categories.map(cat => `
+                <button class="category-btn ${cat === 'all' ? 'active' : ''}" 
+                        onclick="filterCategory('${cat}')">
+                    ${cat === 'all' ? 'الكل' : cat}
+                </button>
+            `).join('');
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            let words = getWordsByLevel(currentLevel);
+            if (category !== 'all') {
+                words = words.filter(w => w.category === category);
+            }
+            currentWords = words;
+            currentPage = 1;
+            displayWords(words);
+        }
+
+        function displayWords(words) {
+            // تطبيق الترقيم
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedWords = words.slice(start, end);
+            
+            const grid = document.getElementById('wordsGrid');
+            
+            if (paginatedWords.length === 0) {
+                grid.innerHTML = '<div class="no-results">لا توجد كلمات في هذا التصنيف</div>';
+                return;
+            }
+
+            grid.innerHTML = paginatedWords.map(item => {
+                const isSaved = savedWords.includes(item.id);
+                const levelClass = currentLevel === 'beginner' ? 'beginner' : 
+                                 currentLevel === 'intermediate' ? 'intermediate' : 'advanced';
+                return `
+                    <div class="word-card ${isSaved ? 'saved' : ''}" onclick="showWordDetails(${item.id})">
+                        <div class="word-header">
+                            <div class="word-main">
+                                <div class="word-icon">${item.word[0].toUpperCase()}</div>
+                                <span class="word-text">${item.word}</span>
+                            </div>
+                            <span class="word-badge ${levelClass}">${currentLevel}</span>
+                        </div>
+                        
+                        <div class="word-arabic">${item.arabic}</div>
+                        
+                        <div class="word-pronunciation">
+                            <i class="fas fa-microphone-alt"></i>
+                            ${item.pronunciation || ''}
+                        </div>
+                        
+                        <div class="word-example">
+                            <div class="example-english">"${item.example}"</div>
+                            <div class="example-arabic">${item.exampleArabic}</div>
+                        </div>
+                        
+                        <div class="word-actions" onclick="event.stopPropagation()">
+                            <button class="action-btn" onclick="playWord('${item.word}')">
+                                <i class="fas fa-volume-up"></i> استماع
+                            </button>
+                            <button class="action-btn ${isSaved ? 'saved' : ''}" 
+                                    onclick="toggleSave(${item.id})">
+                                <i class="fas ${isSaved ? 'fa-bookmark' : 'fa-bookmark-o'}"></i> 
+                                ${isSaved ? 'محفوظة' : 'حفظ'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updatePagination(words.length);
+        }
+
+        function updatePagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let pages = '';
+            for (let i = 1; i <= totalPages; i++) {
+                pages += `<button class="page-btn ${i === currentPage ? 'active' : ''}" 
+                                 onclick="goToPage(${i})">${i}</button>`;
+            }
+            
+            pagination.innerHTML = pages;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            displayWords(currentWords);
+        }
+
+        function loadDailyPhrases() {
+            const phrases = WORDS_DATA.daily_phrases || [];
+            const grid = document.getElementById('phrasesGrid');
+            
+            grid.innerHTML = phrases.slice(0, 6).map(phrase => `
+                <div class="phrase-card">
+                    <div class="phrase-english">${phrase.phrase}</div>
+                    <div class="phrase-arabic">${phrase.arabic}</div>
+                    <div class="phrase-pronunciation">
+                        <i class="fas fa-microphone-alt"></i>
+                        ${phrase.pronunciation}
+                    </div>
+                    <span class="phrase-situation">${phrase.situation}</span>
+                    <button class="action-btn" style="margin-top: 0.5rem;" 
+                            onclick="playWord('${phrase.phrase}')">
+                        <i class="fas fa-volume-up"></i> استمع
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function playWord(word) {
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function toggleSave(wordId) {
+            if (savedWords.includes(wordId)) {
+                savedWords = savedWords.filter(id => id !== wordId);
+                showNotification('تم إزالة الكلمة من المحفوظات', 'info');
+            } else {
+                savedWords.push(wordId);
+                showNotification('تم حفظ الكلمة بنجاح', 'success');
+            }
+            
+            localStorage.setItem('savedWords', JSON.stringify(savedWords));
+            updateSavedCount();
+            displayWords(currentWords);
+        }
+
+        function showWordDetails(wordId) {
+            const word = currentWords.find(w => w.id === wordId);
+            if (word) {
+                alert(`
+                    الكلمة: ${word.word}
+                    المعنى: ${word.arabic}
+                    النطق: ${word.pronunciation}
+                    مثال: ${word.example}
+                `);
+            }
+        }
+
+        function toggleView(view) {
+            currentView = view;
+            const grid = document.getElementById('wordsGrid');
+            
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (view === 'list') {
+                grid.classList.add('list-view');
+            } else {
+                grid.classList.remove('list-view');
+            }
+        }
+
+        function showWordOfDay() {
+            const word = getRandomWord();
+            document.getElementById('wordOfDayWord').textContent = word.word;
+            document.getElementById('wordOfDayArabic').textContent = word.arabic;
+        }
+
+        function closeWordOfDay() {
+            document.getElementById('wordOfDay').style.display = 'none';
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            notification.style.position = 'fixed';
+            notification.style.top = '100px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
+            notification.style.zIndex = '9999';
+            notification.style.minWidth = '300px';
+            notification.style.textAlign = 'center';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // البحث
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value;
+            if (query.length < 2) {
+                displayWords(currentWords);
+                return;
+            }
+
+            const results = searchWords(query);
+            displayWords(results);
+        });
+    </script>
+</body>
+</html>

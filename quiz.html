@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLingua | الاختبارات</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .quiz-container {
+            max-width: 800px;
+            margin: 100px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .quiz-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-header p {
+            color: var(--text-secondary);
+        }
+
+        .quiz-type-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .quiz-type-btn {
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--border-light);
+            background: transparent;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-type-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .quiz-type-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: white;
+        }
+
+        .level-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .level-btn {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid var(--border-light);
+            background: transparent;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .level-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .level-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .quiz-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--border-light);
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .quiz-progress {
+            text-align: center;
+        }
+
+        .progress-text {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: var(--bg-tertiary);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .quiz-timer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--bg-tertiary);
+            border-radius: var(--radius-full);
+            color: var(--text-primary);
+        }
+
+        .timer-warning {
+            color: var(--danger);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .question-container {
+            margin: 2rem 0;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-item {
+            padding: 1.25rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary);
+            background-color: var(--bg-hover);
+        }
+
+        .option-item.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.1), 
+                rgba(236, 72, 153, 0.1));
+        }
+
+        .option-item.correct {
+            border-color: var(--success);
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .option-item.wrong {
+            border-color: var(--danger);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .option-prefix {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .option-item.selected .option-prefix {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .question-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-light);
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-prev {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-prev:hover:not(:disabled) {
+            background-color: var(--bg-hover);
+        }
+
+        .nav-next {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .nav-next:hover:not(:disabled) {
+            transform: translateX(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .check-btn {
+            padding: 0.75rem 2rem;
+            background-color: var(--success);
+            color: white;
+            border: none;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .check-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            color: white;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .result-score {
+            font-size: 5rem;
+            font-weight: 800;
+            margin: 1rem 0;
+        }
+
+        .result-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .result-stat {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(10px);
+        }
+
+        .result-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .result-btn {
+            padding: 1rem 2rem;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .result-btn:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .explanation-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border-right: 4px solid var(--info);
+            display: none;
+        }
+
+        .explanation-box.show {
+            display: block;
+        }
+
+        .review-section {
+            margin-top: 2rem;
+        }
+
+        .review-item {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+        }
+
+        .review-question {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-answer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .review-answer.correct {
+            color: var(--success);
+        }
+
+        .review-answer.wrong {
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <span>CineLingua</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="lessons.html">الكلمات</a></li>
+                <li><a href="stories.html">القصص</a></li>
+                <li><a href="quiz.html" class="active">الاختبارات</a></li>
+                <li><a href="dashboard.html">لوحة التحكم</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="register.html" class="btn btn-primary">تسجيل الدخول</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>📝 اختبر مستواك</h1>
+            <p>اختر نوع الاختبار والمستوى المناسب لك</p>
+        </div>
+
+        <!-- نوع الاختبار -->
+        <div class="quiz-type-selector">
+            <button class="quiz-type-btn active" onclick="changeQuizType('vocabulary')">
+                <i class="fas fa-book"></i>
+                مفردات
+            </button>
+            <button class="quiz-type-btn" onclick="changeQuizType('grammar')">
+                <i class="fas fa-align-left"></i>
+                قواعد
+            </button>
+            <button class="quiz-type-btn" onclick="changeQuizType('mixed')">
+                <i class="fas fa-random"></i>
+                اختبار شامل
+            </button>
+        </div>
+
+        <!-- المستوى -->
+        <div class="level-selector">
+            <button class="level-btn active" onclick="changeLevel('beginner')">مبتدئ</button>
+            <button class="level-btn" onclick="changeLevel('intermediate')">متوسط</button>
+            <button class="level-btn" onclick="changeLevel('advanced')">متقدم</button>
+        </div>
+
+        <!-- بطاقة الاختبار -->
+        <div id="quizCard" class="quiz-card">
+            <!-- المحتوى يتحط هنا بالجافاسكريبت -->
+        </div>
+    </div>
+
+    <script src="words-data.js"></script>
+    <script src="translations.js"></script>
+    <script src="theme.js"></script>
+    <script>
+        // أسئلة الاختبارات
+        const QUIZ_QUESTIONS = {
+            vocabulary: {
+                beginner: [
+                    {
+                        question: "ماذا تعني كلمة 'Hello'؟",
+                        options: ["مرحباً", "وداعاً", "شكراً", "من فضلك"],
+                        correct: 0,
+                        explanation: "Hello تستخدم للتحية"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Book'؟",
+                        options: ["قلم", "كتاب", "دفتر", "ممحاة"],
+                        correct: 1,
+                        explanation: "Book = كتاب"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Eat'؟",
+                        options: ["يشرب", "يأكل", "ينام", "يمشي"],
+                        correct: 1,
+                        explanation: "Eat = يأكل"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Happy'؟",
+                        options: ["حزين", "سعيد", "متعب", "جائع"],
+                        correct: 1,
+                        explanation: "Happy = سعيد"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Big'؟",
+                        options: ["صغير", "كبير", "طويل", "قصير"],
+                        correct: 1,
+                        explanation: "Big = كبير"
+                    }
+                ],
+                intermediate: [
+                    {
+                        question: "ماذا تعني كلمة 'Beautiful'؟",
+                        options: ["قبيح", "جميل", "غالي", "رخيص"],
+                        correct: 1,
+                        explanation: "Beautiful = جميل"
+                    },
+                    {
+                        question: "ماذا تعني كلمة 'Understand'؟",
+                        options: ["ينسى", "يفهم", "يسمع", "يرى"],
+                        correct: 1,
+                        explanation: "Understand = يفهم"
+                    }
+                ],
+                advanced: [
+                    {
+                        question: "ماذا تعني كلمة 'Nevertheless'؟",
+                        options: ["لذلك", "مع ذلك", "بسبب", "أيضاً"],
+                        correct: 1,
+                        explanation: "Nevertheless = مع ذلك"
+                    }
+                ]
+            },
+            grammar: {
+                beginner: [
+                    {
+                        question: "أي جملة صحيحة؟",
+                        options: ["He go to school", "He goes to school", "He going to school", "He gone to school"],
+                        correct: 1,
+                        explanation: "مع He نستخدم goes"
+                    }
+                ],
+                intermediate: [
+                    {
+                        question: "أي جملة صحيحة؟",
+                        options: ["I have been to London", "I have gone to London", "I was to London", "I am to London"],
+                        correct: 0,
+                        explanation: "I have been = لقد زرت"
+                    }
+                ],
+                advanced: [
+                    {
+                        question: "أي جملة صحيحة؟",
+                        options: ["If I was rich", "If I were rich", "If I am rich", "If I be rich"],
+                        correct: 1,
+                        explanation: "في الحالات الافتراضية نستخدم were"
+                    }
+                ]
+            }
+        };
+
+        // المتغيرات العامة
+        let currentQuizType = 'vocabulary';
+        let currentLevel = 'beginner';
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let quizCompleted = false;
+        let timer = null;
+        let timeLeft = 300; // 5 دقائق
+        let score = 0;
+
+        // تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuiz();
+        });
+
+        function changeQuizType(type) {
+            currentQuizType = type;
+            
+            document.querySelectorAll('.quiz-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadQuiz();
+        }
+
+        function changeLevel(level) {
+            currentLevel = level;
+            
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadQuiz();
+        }
+
+        function loadQuiz() {
+            // جلب الأسئلة
+            currentQuestions = QUIZ_QUESTIONS[currentQuizType]?.[currentLevel] || 
+                              QUIZ_QUESTIONS.vocabulary.beginner;
+            
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuestions.length).fill(null);
+            quizCompleted = false;
+            timeLeft = 300;
+            score = 0;
+
+            displayQuiz();
+            startTimer();
+        }
+
+        function displayQuiz() {
+            const quizCard = document.getElementById('quizCard');
+            
+            if (quizCompleted) {
+                displayResults();
+                return;
+            }
+
+            const question = currentQuestions[currentQuestionIndex];
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+
+            quizCard.innerHTML = `
+                <div class="quiz-info">
+                    <div class="quiz-progress">
+                        <div class="progress-text">
+                            السؤال ${currentQuestionIndex + 1} من ${currentQuestions.length}
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="quiz-timer" id="timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="timeDisplay">05:00</span>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-text">
+                        ${question.question}
+                    </div>
+                    
+                    <div class="options-grid" id="optionsGrid">
+                        ${question.options.map((opt, index) => `
+                            <div class="option-item" onclick="selectOption(${index})">
+                                <span class="option-prefix">${String.fromCharCode(65 + index)}</span>
+                                <span>${opt}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="explanation-box" id="explanation">
+                        ${question.explanation}
+                    </div>
+                </div>
+
+                <div class="question-footer">
+                    <button class="nav-btn nav-prev" onclick="prevQuestion()" 
+                            ${currentQuestionIndex === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-arrow-right"></i>
+                        السابق
+                    </button>
+                    
+                    <button class="check-btn" onclick="checkAnswer()">
+                        تحقق
+                    </button>
+                    
+                    <button class="nav-btn nav-next" onclick="nextQuestion()"
+                            ${currentQuestionIndex === currentQuestions.length - 1 ? 'disabled' : ''}>
+                        التالي
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            `;
+
+            // استعادة الإجابة السابقة
+            const prevAnswer = userAnswers[currentQuestionIndex];
+            if (prevAnswer !== null) {
+                const options = document.querySelectorAll('.option-item');
+                options[prevAnswer]?.classList.add('selected');
+            }
+        }
+
+        function selectOption(index) {
+            if (quizCompleted) return;
+            
+            document.querySelectorAll('.option-item').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.closest('.option-item').classList.add('selected');
+            
+            userAnswers[currentQuestionIndex] = index;
+        }
+
+        function checkAnswer() {
+            const selected = userAnswers[currentQuestionIndex];
+            if (selected === null) {
+                showNotification('الرجاء اختيار إجابة أولاً', 'warning');
+                return;
+            }
+
+            const question = currentQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option-item');
+            const explanation = document.getElementById('explanation');
+            
+            // إظهار الإجابة الصحيحة
+            options.forEach((opt, index) => {
+                opt.classList.remove('selected');
+                if (index === question.correct) {
+                    opt.classList.add('correct');
+                } else if (index === selected && selected !== question.correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            // إظهار الشرح
+            explanation.classList.add('show');
+
+            // منع التحديد مرة أخرى
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuiz();
+            }
+        }
+
+        function startTimer() {
+            if (timer) clearInterval(timer);
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    completeQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            const timeDisplay = document.getElementById('timeDisplay');
+            if (timeDisplay) {
+                timeDisplay.textContent = display;
+                
+                if (timeLeft < 60) {
+                    timeDisplay.parentElement.classList.add('timer-warning');
+                }
+            }
+        }
+
+        function completeQuiz() {
+            clearInterval(timer);
+            quizCompleted = true;
+            
+            // حساب النتيجة
+            score = userAnswers.reduce((count, answer, index) => {
+                return count + (answer === currentQuestions[index].correct ? 1 : 0);
+            }, 0);
+            
+            displayResults();
+        }
+
+        function displayResults() {
+            const percentage = Math.round((score / currentQuestions.length) * 100);
+            
+            let message = '';
+            if (percentage >= 90) message = 'ممتاز! 🎉';
+            else if (percentage >= 70) message = 'جيد جداً! 👍';
+            else if (percentage >= 50) message = 'جيد، استمر في التعلم';
+            else message = 'تحتاج للمراجعة، حاول مرة أخرى';
+
+            const quizCard = document.getElementById('quizCard');
+            quizCard.innerHTML = `
+                <div class="result-card">
+                    <h2>${message}</h2>
+                    <div class="result-score">${percentage}%</div>
+                    
+                    <div class="result-details">
+                        <div class="result-stat">
+                            <div class="result-stat-value">${score}</div>
+                            <div>إجابات صحيحة</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value">${currentQuestions.length - score}</div>
+                            <div>إجابات خاطئة</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value">${currentQuestions.length}</div>
+                            <div>إجمالي الأسئلة</div>
+                        </div>
+                    </div>
+
+                    <div class="review-section">
+                        <h3>مراجعة الإجابات</h3>
+                        ${currentQuestions.map((q, index) => {
+                            const userAnswer = userAnswers[index];
+                            const isCorrect = userAnswer === q.correct;
+                            return `
+                                <div class="review-item">
+                                    <div class="review-question">${index + 1}. ${q.question}</div>
+                                    <div class="review-answer ${isCorrect ? 'correct' : 'wrong'}">
+                                        <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                                        إجابتك: ${userAnswer !== null ? q.options[userAnswer] : 'لم تجب'}
+                                    </div>
+                                    <div class="review-answer correct">
+                                        <i class="fas fa-check-circle"></i>
+                                        الإجابة الصحيحة: ${q.options[q.correct]}
+                                    </div>
+                                    <small>${q.explanation}</small>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <div class="result-actions">
+                        <button class="result-btn" onclick="loadQuiz()">
+                            <i class="fas fa-redo"></i>
+                            إعادة الاختبار
+                        </button>
+                        <button class="result-btn" onclick="window.location.href='lessons.html'">
+                            <i class="fas fa-book"></i>
+                            الدروس
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            notification.style.position = 'fixed';
+            notification.style.top = '100px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
+            notification.style.zIndex = '9999';
+            notification.style.minWidth = '300px';
+            notification.style.textAlign = 'center';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

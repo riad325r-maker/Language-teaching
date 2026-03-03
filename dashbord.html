@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLingua | لوحة التحكم</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ======================================== */
+        /* DASHBOARD LAYOUT */
+        /* ======================================== */
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--bg-primary);
+        }
+
+        /* ======================================== */
+        /* SIDEBAR - الشريط الجانبي */
+        /* ======================================== */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-card);
+            border-left: 1px solid var(--border-light);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .sidebar-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .sidebar-header .logo i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-header .logo span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-nav {
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            margin: 0.25rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            gap: 1rem;
+            position: relative;
+        }
+
+        .sidebar-nav a i {
+            width: 24px;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-nav a:hover {
+            background-color: var(--bg-hover);
+            color: var(--primary);
+        }
+
+        .sidebar-nav a.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+            color: var(--primary);
+            border-right: 3px solid var(--primary);
+        }
+
+        .sidebar-nav a.active::before {
+            content: '';
+            position: absolute;
+            left: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 0 var(--radius-full) var(--radius-full) 0;
+        }
+
+        .badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            margin-right: auto;
+        }
+
+        .badge.hot {
+            background-color: var(--danger);
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-light);
+            background-color: var(--bg-card);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .user-info:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .user-avatar {
+            position: relative;
+        }
+
+        .user-avatar img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+        }
+
+        .online-status {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--success);
+            border: 2px solid var(--bg-card);
+            border-radius: 50%;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-level {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .user-level i {
+            color: var(--primary);
+        }
+
+        .user-arrow {
+            color: var(--text-tertiary);
+            transition: var(--transition);
+        }
+
+        .user-info:hover .user-arrow {
+            transform: rotate(180deg);
+        }
+
+        .user-quick-menu {
+            position: absolute;
+            bottom: 100%;
+            left: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
+            padding: 0.5rem;
+            display: none;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-quick-menu.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-quick-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .user-quick-menu a:hover {
+            background-color: var(--bg-hover);
+            color: var(--primary);
+        }
+
+        /* ======================================== */
+        /* MAIN CONTENT - المحتوى الرئيسي */
+        /* ======================================== */
+        .main-content {
+            flex: 1;
+            margin-right: 280px;
+            padding: 2rem;
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        /* ======================================== */
+        /* DASHBOARD HEADER */
+        /* ======================================== */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-left h1 {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .welcome-message {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .welcome-message i {
+            color: var(--success);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-search {
+            position: relative;
+            min-width: 300px;
+        }
+
+        .header-search i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+        }
+
+        .header-search input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-full);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .header-search input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .notifications {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notifications i {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .notifications:hover i {
+            color: var(--primary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-full);
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .notifications-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 300px;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
+            margin-top: 1rem;
+            display: none;
+            z-index: 100;
+        }
+
+        .notifications:hover .notifications-dropdown {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notifications-dropdown h4 {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .notification-item:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .notification-item.unread {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        .notification-item i {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .notification-item p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .notification-item small {
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+        }
+
+        /* ======================================== */
+        /* STATS CARDS - بطاقات الإحصائيات */
+        /* ======================================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transform: translateX(-100%);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .stat-icon.purple {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .stat-icon.orange {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .stat-info p {
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-trend {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-trend.positive {
+            color: var(--success);
+        }
+
+        .stat-trend.negative {
+            color: var(--danger);
+        }
+
+        .stat-trend.neutral {
+            color: var(--text-tertiary);
+        }
+
+        /* ======================================== */
+        /* PROGRESS SECTION - قسم التقدم */
+        /* ======================================== */
+        .progress-section {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .section-header h2 i {
+            color: var(--primary);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .view-all:hover {
+            transform: translateX(-5px);
+        }
+
+        .continue-card {
+            display: flex;
+            gap: 2rem;
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.05), 
+                rgba(236, 72, 153, 0.05));
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .continue-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .continue-image {
+            position: relative;
+            width: 200px;
+            height: 120px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .continue-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .continue-card:hover .continue-image img {
+            transform: scale(1.05);
+        }
+
+        .duration {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+        }
+
+        .continue-info {
+            flex: 1;
+        }
+
+        .movie-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-level {
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .movie-level.beginner {
+            background-color: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .movie-level.intermediate {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .movie-level.advanced {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .movie-year {
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+
+        .continue-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .movie-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-percentage {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--bg-tertiary);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-full);
+            position: relative;
+            transition: width 0.3s ease;
+        }
+
+        .learned-words {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .words-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .word-chips {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .word-chip {
+            background-color: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .word-chip:hover {
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+        }
+
+        .continue-btn {
+            margin-top: 1rem;
+            padding: 0.75rem 2rem;
+        }
+
+        /* ======================================== */
+        /* DAILY CHALLENGES - التحديات اليومية */
+        /* ======================================== */
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .challenge-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .challenge-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .challenge-icon.hot {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+        }
+
+        .challenge-icon.new {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+
+        .challenge-icon.trending {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+        }
+
+        .challenge-info {
+            flex: 1;
+        }
+
+        .challenge-info h4 {
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .challenge-info p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar.small {
+            height: 6px;
+            flex: 1;
+        }
+
+        .participants {
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* ======================================== */
+        /* RECOMMENDATIONS - التوصيات */
+        /* ======================================== */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .movie-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .movie-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .movie-info {
+            padding: 1rem;
+        }
+
+        .movie-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .movie-info p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .movie-info p i {
+            color: var(--primary);
+        }
+
+        .movie-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.9), 
+                rgba(236, 72, 153, 0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: white;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* ======================================== */
+        /* COMMUNITY ACTIVITY - نشاط المجتمع */
+        /* ======================================== */
+        .activity-feed {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--border-light);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content p {
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .activity-content strong {
+            color: var(--primary);
+        }
+
+        .activity-content small {
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+        }
+
+        /* ======================================== */
+        /* ACHIEVEMENTS - الإنجازات */
+        /* ======================================== */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .achievement-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .achievement-card.locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .achievement-card.unlocked {
+            border-color: var(--success);
+            background: linear-gradient(135deg, 
+                rgba(16, 185, 129, 0.05), 
+                rgba(16, 185, 129, 0.1));
+        }
+
+        .achievement-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .achievement-card h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .achievement-card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-progress {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        /* ======================================== */
+        /* RESPONSIVE */
+        /* ======================================== */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .continue-card {
+                flex-direction: column;
+            }
+            
+            .continue-image {
+                width: 100%;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .header-right {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .header-search {
+                min-width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- ======================================== -->
+        <!-- SIDEBAR - الشريط الجانبي -->
+        <!-- ======================================== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-film"></i>
+                    <span>CineLingua</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="active">
+                    <i class="fas fa-home"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="lessons.html">
+                    <i class="fas fa-book"></i>
+                    <span>الدروس</span>
+                    <span class="badge">24</span>
+                </a>
+                <a href="stories.html">
+                    <i class="fas fa-book-open"></i>
+                    <span>القصص</span>
+                    <span class="badge">6</span>
+                </a>
+                <a href="quiz.html">
+                    <i class="fas fa-question-circle"></i>
+                    <span>الاختبارات</span>
+                    <span class="badge hot">3</span>
+                </a>
+                <a href="#saved">
+                    <i class="fas fa-bookmark"></i>
+                    <span>كلماتي</span>
+                    <span class="badge" id="savedWordsBadge">0</span>
+                </a>
+                <a href="#achievements">
+                    <i class="fas fa-trophy"></i>
+                    <span>الإنجازات</span>
+                </a>
+                <a href="#community">
+                    <i class="fas fa-users"></i>
+                    <span>المجتمع</span>
+                </a>
+                <a href="#settings">
+                    <i class="fas fa-cog"></i>
+                    <span>الإعدادات</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info" onclick="toggleUserMenu()">
+                    <div class="user-avatar">
+                        <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=6366f1&color=fff&size=100" alt="User">
+                        <span class="online-status"></span>
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">أحمد محمد</div>
+                        <div class="user-level">
+                            <i class="fas fa-crown"></i>
+                            <span id="userLevel">مستوى متوسط</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-up user-arrow"></i>
+                </div>
+
+                <div class="user-quick-menu" id="userQuickMenu">
+                    <a href="#profile"><i class="fas fa-user"></i> الملف الشخصي</a>
+                    <a href="#stats"><i class="fas fa-chart-line"></i> إحصائياتي</a>
+                    <a href="#settings"><i class="fas fa-cog"></i> الإعدادات</a>
+                    <a href="index.html"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ======================================== -->
+        <!-- MAIN CONTENT - المحتوى الرئيسي -->
+        <!-- ======================================== -->
+        <main class="main-content">
+            <!-- HEADER -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1>مرحباً أحمد! 👋</h1>
+                    <div class="welcome-message">
+                        <i class="fas fa-fire"></i>
+                        <span id="streakMessage">7 أيام متتالية! استمر 💪</span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="header-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="ابحث عن كلمة أو قصة...">
+                    </div>
+
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                        <div class="notifications-dropdown">
+                            <h4>الإشعارات</h4>
+                            <a href="#" class="notification-item unread">
+                                <i class="fas fa-trophy"></i>
+                                <div>
+                                    <p>تهانينا! أكملت تحدي 5 كلمات</p>
+                                    <small>منذ 5 دقائق</small>
+                                </div>
+                            </a>
+                            <a href="#" class="notification-item">
+                                <i class="fas fa-fire"></i>
+                                <div>
+                                    <p>7 أيام متتالية! استمر بنفس القوة</p>
+                                    <small>منذ ساعة</small>
+                                </div>
+                            </a>
+                            <a href="#" class="notification-item">
+                                <i class="fas fa-star"></i>
+                                <div>
+                                    <p>قصة جديدة: "The Lost Cat"</p>
+                                    <small>منذ 3 ساعات</small>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <button class="btn lang-switcher" onclick="toggleLanguage()">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLang">العربية</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- STATS CARDS - بطاقات الإحصائيات -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="streakCount">7</h3>
+                        <p>أيام متتالية</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +2 من الأسبوع الماضي
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="wordsCount">120</h3>
+                        <p>كلمة محفوظة</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +15 اليوم
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="storiesCount">4</h3>
+                        <p>قصص مقروءة</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +1 اليوم
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="achievementsCount">8</h3>
+                        <p>إنجازات</p>
+                        <div class="stat-trend neutral">
+                            <i class="fas fa-minus"></i> 2 متبقية للذهب
+                        </div>
