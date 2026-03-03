@@ -1,0 +1,21 @@
+// auth-check.js
+// حماية الصفحات من الدخول بدون تسجيل
+
+// التحقق من وجود مستخدم مسجل دخول
+const currentUser = localStorage.getItem('currentUser');
+
+// الصفحات المحمية
+const protectedPages = [
+    'lessons.html',
+    'stories.html', 
+    'quiz.html',
+    'dashboard.html'
+];
+
+// اسم الصفحة الحالية
+const currentPage = window.location.pathname.split('/').pop();
+
+// إذا كانت الصفحة محمية وما في مستخدم
+if (protectedPages.includes(currentPage) && !currentUser) {
+    window.location.href = 'index.html';
+}
