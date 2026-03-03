@@ -10,10 +10,21 @@
     
     <!-- إضافات CSS -->
     <style>
-        /* قسم تسجيل الدخول */
-        .login-section {
-            max-width: 450px;
-            margin: 3rem auto;
+        /* إخفاء شريط التنقل في صفحة التسجيل */
+        .navbar {
+            display: none;
+        }
+        
+        /* تعديل الهيرو */
+        .hero {
+            margin-top: 0;
+            padding: 2rem 2rem 4rem;
+        }
+
+        /* قسم التسجيل */
+        .register-section {
+            max-width: 500px;
+            margin: 2rem auto;
             padding: 2.5rem;
             background-color: var(--bg-card);
             border-radius: var(--radius-lg);
@@ -33,12 +44,20 @@
             }
         }
 
-        .login-header {
+        .register-header {
             text-align: center;
             margin-bottom: 2rem;
         }
 
-        .login-header h2 {
+        .register-header i {
+            font-size: 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .register-header h2 {
             font-size: 2rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
@@ -46,22 +65,29 @@
             margin-bottom: 0.5rem;
         }
 
-        .login-header p {
+        .register-header p {
             color: var(--text-secondary);
         }
 
-        .login-form .form-group {
+        .register-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .register-form .form-group {
             margin-bottom: 1.5rem;
         }
 
-        .login-form label {
+        .register-form label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        .login-form input {
+        .register-form input {
             width: 100%;
             padding: 0.75rem 1rem;
             border: 2px solid var(--border-light);
@@ -72,7 +98,7 @@
             transition: var(--transition);
         }
 
-        .login-form input:focus {
+        .register-form input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
@@ -101,20 +127,7 @@
             color: var(--primary);
         }
 
-        .forgot-password {
-            display: block;
-            text-align: left;
-            margin-top: 0.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
-
-        .btn-login {
+        .btn-register {
             width: 100%;
             padding: 1rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -132,9 +145,14 @@
             margin: 1.5rem 0;
         }
 
-        .btn-login:hover {
+        .btn-register:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-lg);
+        }
+
+        .btn-register:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         /* قسم Google */
@@ -177,6 +195,11 @@
             font-size: 1.2rem;
         }
 
+        .btn-google:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
         .divider {
             text-align: center;
             position: relative;
@@ -208,19 +231,31 @@
             font-size: 0.9rem;
         }
 
-        .signup-link {
+        .login-link {
             text-align: center;
             margin-top: 1.5rem;
         }
 
-        .signup-link a {
+        .login-link a {
             color: var(--primary);
             font-weight: 600;
             text-decoration: none;
         }
 
-        .signup-link a:hover {
+        .login-link a:hover {
             text-decoration: underline;
+        }
+
+        .terms {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .terms a {
+            color: var(--primary);
+            text-decoration: none;
         }
 
         .alert {
@@ -247,6 +282,11 @@
             color: var(--danger);
         }
 
+        .alert.info {
+            border-color: var(--info);
+            color: var(--info);
+        }
+
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -256,6 +296,22 @@
                 opacity: 1;
                 transform: translate(-50%, 0);
             }
+        }
+
+        /* تحميل */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
     
@@ -269,64 +325,48 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <i class="fas fa-film"></i>
-                <span>CineLingua</span>
-            </div>
-            
-            <ul class="nav-menu">
-                <li><a href="index.html" class="active">الرئيسية</a></li>
-                <li><a href="lessons.html">الكلمات</a></li>
-                <li><a href="stories.html">القصص</a></li>
-                <li><a href="quiz.html">الاختبارات</a></li>
-                <li><a href="dashbord.html">لوحة التحكم</a></li>
-            </ul>
-            
-            <div class="nav-buttons">
-                <!-- زر الثيم -->
-                <div class="theme-toggle" id="themeToggle">
-                    <button class="theme-toggle-btn active" onclick="setTheme('light')">
-                        <i class="fas fa-sun"></i>
-                    </button>
-                    <button class="theme-toggle-btn" onclick="setTheme('dark')">
-                        <i class="fas fa-moon"></i>
-                    </button>
+    <!-- تم إخفاء شريط التنقل -->
+
+    <!-- قسم إنشاء حساب مباشر -->
+    <section class="register-section">
+        <div class="register-header">
+            <i class="fas fa-film"></i>
+            <h2>أنشئ حسابك المجاني</h2>
+            <p>ابدأ رحلتك في تعلم الإنجليزية الآن</p>
+        </div>
+
+        <!-- نموذج إنشاء حساب -->
+        <form class="register-form" id="registerForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>الاسم الأول</label>
+                    <input type="text" id="firstName" placeholder="أحمد" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>اسم العائلة</label>
+                    <input type="text" id="lastName" placeholder="محمد" required>
                 </div>
             </div>
-        </div>
-    </nav>
-
-    <!-- قسم تسجيل الدخول (بدون أيقونات داخلية) -->
-    <section class="login-section">
-        <div class="login-header">
-            <h2>تسجيل الدخول</h2>
-            <p>أدخل بريدك أو استخدم حساب Google</p>
-        </div>
-
-        <form class="login-form" id="loginForm">
-            <!-- البريد الإلكتروني (بدون أيقونة) -->
+            
             <div class="form-group">
                 <label>البريد الإلكتروني</label>
-                <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required>
+                <input type="email" id="email" placeholder="ahmed@example.com" required>
             </div>
-
-            <!-- كلمة المرور مع زر الإظهار فقط -->
+            
             <div class="form-group">
                 <label>كلمة المرور</label>
                 <div class="password-wrapper">
-                    <input type="password" id="loginPassword" placeholder="********" required>
+                    <input type="password" id="password" placeholder="********" required>
                     <i class="fas fa-eye password-toggle" onclick="togglePassword()" id="togglePassword"></i>
                 </div>
-                <a href="#" class="forgot-password" onclick="forgotPassword()">نسيت كلمة المرور؟</a>
+                <small style="color: var(--text-tertiary);">يجب أن تكون 6 أحرف على الأقل</small>
             </div>
 
-            <!-- زر تسجيل الدخول بالبريد -->
-            <button type="submit" class="btn-login" onclick="handleLogin(event)">
-                <i class="fas fa-sign-in-alt"></i>
-                تسجيل الدخول بالبريد
+            <!-- زر إنشاء حساب -->
+            <button type="submit" class="btn-register" id="registerBtn">
+                <i class="fas fa-user-plus"></i>
+                إنشاء حساب جديد
             </button>
 
             <!-- فصل -->
@@ -334,38 +374,68 @@
                 <span>أو</span>
             </div>
 
-            <!-- تسجيل الدخول بـ Google -->
+            <!-- التسجيل بـ Google -->
             <div class="google-section">
-                <button type="button" class="btn-google" onclick="googleLogin()">
+                <button type="button" class="btn-google" onclick="handleGoogleRegister()" id="googleBtn">
+                    <i class="fab fa-google"></i>
+                    متابعة بحساب Google
+                </button>
+            </div>
+
+            <!-- رابط تسجيل الدخول للمستخدمين الحاليين -->
+            <div class="login-link">
+                <span>لديك حساب بالفعل؟ </span>
+                <a href="#" onclick="showLoginForm()">تسجيل دخول</a>
+            </div>
+
+            <div class="terms">
+                بالتسجيل، أنت توافق على <a href="#">شروط الاستخدام</a> و <a href="#">سياسة الخصوصية</a>
+            </div>
+        </form>
+
+        <!-- نموذج تسجيل الدخول (مخفي في البداية) -->
+        <form class="register-form" id="loginForm" style="display: none;">
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required>
+            </div>
+            
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="********" required>
+                </div>
+                <a href="#" class="forgot-password" style="display: block; text-align: left; margin-top: 0.5rem; color: var(--primary); text-decoration: none; font-size: 0.9rem;" onclick="forgotPassword()">نسيت كلمة المرور؟</a>
+            </div>
+
+            <button type="submit" class="btn-register" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i>
+                تسجيل الدخول
+            </button>
+
+            <div class="divider">
+                <span>أو</span>
+            </div>
+
+            <div class="google-section">
+                <button type="button" class="btn-google" onclick="handleGoogleLogin()">
                     <i class="fab fa-google"></i>
                     تسجيل الدخول بـ Google
                 </button>
             </div>
 
-            <!-- رابط إنشاء حساب -->
-            <div class="signup-link">
+            <div class="login-link">
                 <span>ليس لديك حساب؟ </span>
-                <a href="register.html">أنشئ حساب جديد</a>
+                <a href="#" onclick="showRegisterForm()">إنشاء حساب جديد</a>
             </div>
         </form>
     </section>
 
-    <!-- Hero Section -->
+    <!-- Hero Section (مبسط) -->
     <section class="hero">
         <div class="hero-content" data-aos="fade-up">
             <h1>تعلم الإنجليزية بذكاء مع CineLingua</h1>
             <p>منصة تعليمية متكاملة تساعدك على تعلم الإنجليزية من خلال كلمات، جمل، قصص، واختبارات تفاعلية</p>
-            
-            <div class="hero-buttons">
-                <a href="register.html" class="btn btn-primary btn-large">
-                    <i class="fas fa-rocket"></i>
-                    ابدأ رحلتك الآن
-                </a>
-                <a href="lessons.html" class="btn btn-outline btn-large">
-                    <i class="fas fa-book"></i>
-                    استعرض الدروس
-                </a>
-            </div>
             
             <div class="hero-stats">
                 <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
@@ -412,12 +482,26 @@
     <script src="translations.js"></script>
     <script src="theme.js"></script>
     
-    <script>
+    <!-- Firebase and Auth Scripts -->
+    <script type="module">
+        // استيراد Firebase
+        import { auth } from './assets/js/firebase-config.js';
+        import { registerUser, loginUser } from './assets/js/auth.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
         AOS.init({ duration: 1000, once: true });
+
+        // مراقبة حالة المصادقة
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // المستخدم مسجل دخول - نوجهه للوحة التحكم
+                window.location.href = 'dashboard.html';
+            }
+        });
 
         // إظهار/إخفاء كلمة المرور
         window.togglePassword = function() {
-            const passwordInput = document.getElementById('loginPassword');
+            const passwordInput = document.getElementById('password');
             const toggleIcon = document.getElementById('togglePassword');
             
             if (passwordInput.type === 'password') {
@@ -431,10 +515,64 @@
             }
         };
 
-        // تسجيل الدخول بالبريد
-        window.handleLogin = function(event) {
-            event.preventDefault();
+        // التبديل بين نماذج التسجيل والدخول
+        window.showRegisterForm = function(e) {
+            if (e) e.preventDefault();
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        };
+
+        window.showLoginForm = function(e) {
+            if (e) e.preventDefault();
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        };
+
+        // معالجة إنشاء حساب جديد
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
             
+            const btn = document.getElementById('registerBtn');
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!firstName || !lastName || !email || !password) {
+                showNotification('الرجاء ملء جميع الحقول', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showNotification('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+                return;
+            }
+
+            btn.innerHTML = 'جاري إنشاء الحساب... <span class="loading-spinner"></span>';
+            btn.disabled = true;
+
+            const result = await registerUser(email, password, { firstName, lastName });
+            
+            if (result.success) {
+                showNotification('تم إنشاء الحساب بنجاح! جاري تحويلك...', 'success');
+                // الانتقال يتم تلقائياً عن طريق onAuthStateChanged
+            } else {
+                btn.innerHTML = '<i class="fas fa-user-plus"></i> إنشاء حساب جديد';
+                btn.disabled = false;
+                
+                let msg = 'خطأ في إنشاء الحساب';
+                if (result.error === 'auth/email-already-in-use') msg = 'البريد الإلكتروني مستخدم بالفعل';
+                else if (result.error === 'auth/weak-password') msg = 'كلمة المرور ضعيفة جداً';
+                else if (result.error === 'auth/invalid-email') msg = 'البريد الإلكتروني غير صالح';
+                showNotification(msg, 'error');
+            }
+        });
+
+        // معالجة تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('loginBtn');
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             
@@ -443,43 +581,61 @@
                 return;
             }
 
-            // محاكاة تسجيل دخول
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-            const user = users.find(u => u.email === email && u.password === password);
+            btn.innerHTML = 'جاري تسجيل الدخول... <span class="loading-spinner"></span>';
+            btn.disabled = true;
+
+            const result = await loginUser(email, password);
             
-            if (user || (email === 'test@test.com' && password === '123456')) {
-                localStorage.setItem('currentUser', JSON.stringify({
-                    email: email,
-                    name: user?.name || 'مستخدم',
-                    level: 'متوسط'
-                }));
-                
+            if (result.success) {
                 showNotification('تم تسجيل الدخول بنجاح!', 'success');
-                setTimeout(() => window.location.href = 'dashbord.html', 1500);
+                // الانتقال يتم تلقائياً عن طريق onAuthStateChanged
             } else {
-                showNotification('البريد أو كلمة المرور غير صحيحة', 'error');
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
+                btn.disabled = false;
+                
+                let msg = 'خطأ في تسجيل الدخول';
+                if (result.error === 'auth/user-not-found') msg = 'المستخدم غير موجود';
+                else if (result.error === 'auth/wrong-password') msg = 'كلمة المرور غير صحيحة';
+                else if (result.error === 'auth/invalid-email') msg = 'البريد الإلكتروني غير صالح';
+                showNotification(msg, 'error');
             }
-        };
+        });
 
         // تسجيل الدخول بـ Google
-        window.googleLogin = function() {
-            showNotification('جاري تسجيل الدخول بـ Google...', 'info');
+        window.handleGoogleLogin = async function() {
+            const btn = document.querySelector('#loginForm .btn-google');
+            btn.innerHTML = 'جاري الاتصال بـ Google... <span class="loading-spinner"></span>';
+            btn.disabled = true;
+
+            showNotification('جاري تفعيل تسجيل الدخول بـ Google...', 'info');
             
+            // مؤقتاً نعرض رسالة
             setTimeout(() => {
-                localStorage.setItem('currentUser', JSON.stringify({
-                    email: 'user@gmail.com',
-                    name: 'مستخدم Google',
-                    level: 'متوسط',
-                    isGoogle: true
-                }));
-                
-                showNotification('تم تسجيل الدخول بنجاح!', 'success');
-                setTimeout(() => window.location.href = 'dashbord.html', 1500);
-            }, 1500);
+                btn.innerHTML = '<i class="fab fa-google"></i> تسجيل الدخول بـ Google';
+                btn.disabled = false;
+                showNotification('سيتم تفعيل Google قريباً', 'info');
+            }, 2000);
         };
 
-        window.forgotPassword = function() {
-            const email = document.getElementById('loginEmail').value;
+        // التسجيل بـ Google
+        window.handleGoogleRegister = async function() {
+            const btn = document.querySelector('#registerForm .btn-google');
+            btn.innerHTML = 'جاري الاتصال بـ Google... <span class="loading-spinner"></span>';
+            btn.disabled = true;
+
+            showNotification('جاري تفعيل التسجيل بـ Google...', 'info');
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fab fa-google"></i> متابعة بحساب Google';
+                btn.disabled = false;
+                showNotification('سيتم تفعيل Google قريباً', 'info');
+            }, 2000);
+        };
+
+        // نسيت كلمة المرور
+        window.forgotPassword = function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail')?.value;
             if (email) {
                 showNotification(`تم إرسال رابط إعادة التعيين إلى ${email}`, 'success');
             } else {
@@ -487,23 +643,18 @@
             }
         };
 
+        // إظهار الإشعارات
         function showNotification(message, type) {
             const oldAlert = document.querySelector('.alert');
             if (oldAlert) oldAlert.remove();
 
             const alert = document.createElement('div');
             alert.className = `alert ${type}`;
-            alert.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i><span>${message}</span>`;
+            alert.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i><span>${message}</span>`;
             document.body.appendChild(alert);
             
             setTimeout(() => alert.remove(), 3000);
         }
-
-       // إزالة التحقق اليدوي وخل Firebase يتحكم
-    document.addEventListener('DOMContentLoaded', () => {
-    console.log('Index page loaded');
-    // خل auth-check.js يتولى الموضوع
-}); 
     </script>
 </body>
-                </html>
+</html>
