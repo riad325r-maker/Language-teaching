@@ -8,6 +8,257 @@
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
     
+    <!-- إضافات CSS -->
+    <style>
+        /* قسم تسجيل الدخول */
+        .login-section {
+            max-width: 450px;
+            margin: 3rem auto;
+            padding: 2.5rem;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+        }
+
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* حقل كلمة المرور مع زر الإظهار */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-left: 3rem !important;
+        }
+
+        .password-toggle {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-tertiary);
+            z-index: 2;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: left;
+            margin-top: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* قسم Google */
+        .google-section {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 1rem;
+            background-color: white;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        [data-theme="dark"] .btn-google {
+            background-color: #1e293b;
+            color: white;
+            border-color: #334155;
+        }
+
+        .btn-google:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-google i {
+            color: #DB4437;
+            font-size: 1.2rem;
+        }
+
+        .divider {
+            text-align: center;
+            position: relative;
+            margin: 1.5rem 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: var(--border-light);
+        }
+
+        .divider::before {
+            right: 0;
+        }
+
+        .divider::after {
+            left: 0;
+        }
+
+        .divider span {
+            background-color: var(--bg-card);
+            padding: 0 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .signup-link a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: var(--radius-md);
+            background: white;
+            border: 2px solid;
+            box-shadow: var(--shadow-lg);
+            z-index: 9999;
+            animation: slideDown 0.3s ease;
+        }
+
+        .alert.success {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert.error {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+    </style>
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -35,11 +286,69 @@
             </ul>
             
             <div class="nav-buttons">
-                <!-- زر الثيم يتحط هنا تلقائياً بواسطة theme.js -->
-                <a href="register.html" class="btn btn-primary">ابدأ مجاناً</a>
+                <!-- زر الثيم -->
+                <div class="theme-toggle" id="themeToggle">
+                    <button class="theme-toggle-btn active" onclick="setTheme('light')">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <button class="theme-toggle-btn" onclick="setTheme('dark')">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
+
+    <!-- قسم تسجيل الدخول (بدون أيقونات داخلية) -->
+    <section class="login-section">
+        <div class="login-header">
+            <h2>تسجيل الدخول</h2>
+            <p>أدخل بريدك أو استخدم حساب Google</p>
+        </div>
+
+        <form class="login-form" id="loginForm">
+            <!-- البريد الإلكتروني (بدون أيقونة) -->
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required>
+            </div>
+
+            <!-- كلمة المرور مع زر الإظهار فقط -->
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="********" required>
+                    <i class="fas fa-eye password-toggle" onclick="togglePassword()" id="togglePassword"></i>
+                </div>
+                <a href="#" class="forgot-password" onclick="forgotPassword()">نسيت كلمة المرور؟</a>
+            </div>
+
+            <!-- زر تسجيل الدخول بالبريد -->
+            <button type="submit" class="btn-login" onclick="handleLogin(event)">
+                <i class="fas fa-sign-in-alt"></i>
+                تسجيل الدخول بالبريد
+            </button>
+
+            <!-- فصل -->
+            <div class="divider">
+                <span>أو</span>
+            </div>
+
+            <!-- تسجيل الدخول بـ Google -->
+            <div class="google-section">
+                <button type="button" class="btn-google" onclick="googleLogin()">
+                    <i class="fab fa-google"></i>
+                    تسجيل الدخول بـ Google
+                </button>
+            </div>
+
+            <!-- رابط إنشاء حساب -->
+            <div class="signup-link">
+                <span>ليس لديك حساب؟ </span>
+                <a href="register.html">أنشئ حساب جديد</a>
+            </div>
+        </form>
+    </section>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -75,76 +384,6 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" style="padding: 4rem 2rem; max-width: 1200px; margin: 0 auto;">
-        <h2 class="text-center" style="margin-bottom: 3rem;">لماذا تختار CineLingua؟</h2>
-        
-        <div class="grid grid-auto" style="gap: 2rem;">
-            <div class="card" data-aos="fade-up">
-                <div class="card-header">
-                    <i class="fas fa-robot" style="font-size: 2.5rem; color: var(--primary);"></i>
-                    <h3 class="card-title">توصيات ذكية</h3>
-                </div>
-                <div class="card-body">
-                    <p>نظامنا يحلل مستواك ويقترح المحتوى المناسب لك</p>
-                </div>
-            </div>
-            
-            <div class="card" data-aos="fade-up" data-aos-delay="100">
-                <div class="card-header">
-                    <i class="fas fa-microphone" style="font-size: 2.5rem; color: var(--primary);"></i>
-                    <h3 class="card-title">تدرب على النطق</h3>
-                </div>
-                <div class="card-body">
-                    <p>استمع للنطق الصحيح للكلمات والجمل</p>
-                </div>
-            </div>
-            
-            <div class="card" data-aos="fade-up" data-aos-delay="200">
-                <div class="card-header">
-                    <i class="fas fa-chart-line" style="font-size: 2.5rem; color: var(--primary);"></i>
-                    <h3 class="card-title">تتبع تقدمك</h3>
-                </div>
-                <div class="card-body">
-                    <p>اعرف كم كلمة تعلمت وأزمنة أتقنت</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works -->
-    <section style="padding: 4rem 2rem; background-color: var(--bg-secondary);">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <h2 class="text-center" style="margin-bottom: 3rem;">كيف يعمل الموقع؟</h2>
-            
-            <div class="grid grid-4" style="gap: 2rem;">
-                <div class="card text-center" data-aos="fade-up">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">1️⃣</div>
-                    <h3>سجل حسابك</h3>
-                    <p>أنشئ حساب مجاني وحدد مستواك</p>
-                </div>
-                
-                <div class="card text-center" data-aos="fade-up" data-aos-delay="100">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">2️⃣</div>
-                    <h3>تعلم الكلمات</h3>
-                    <p>تصفح الكلمات المصنفة حسب المستوى</p>
-                </div>
-                
-                <div class="card text-center" data-aos="fade-up" data-aos-delay="200">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">3️⃣</div>
-                    <h3>اقرأ القصص</h3>
-                    <p>طور فهمك للقراءة من خلال القصص</p>
-                </div>
-                
-                <div class="card text-center" data-aos="fade-up" data-aos-delay="300">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">4️⃣</div>
-                    <h3>اختبر نفسك</h3>
-                    <p>أجب على الأسئلة وتتبع تقدمك</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
@@ -162,16 +401,7 @@
                     <li><a href="quiz.html">الاختبارات</a></li>
                 </ul>
             </div>
-            
-            <div class="footer-section">
-                <h4>تواصل معنا</h4>
-                <ul>
-                    <li><i class="fas fa-envelope"></i> info@cinelingua.com</li>
-                    <li><i class="fas fa-phone"></i> +966 123 456 789</li>
-                </ul>
-            </div>
         </div>
-        
         <div class="footer-bottom">
             <p>© 2024 CineLingua. جميع الحقوق محفوظة</p>
         </div>
@@ -183,10 +413,98 @@
     <script src="theme.js"></script>
     
     <script>
-        AOS.init({
-            duration: 1000,
-            once: true
+        AOS.init({ duration: 1000, once: true });
+
+        // إظهار/إخفاء كلمة المرور
+        window.togglePassword = function() {
+            const passwordInput = document.getElementById('loginPassword');
+            const toggleIcon = document.getElementById('togglePassword');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        };
+
+        // تسجيل الدخول بالبريد
+        window.handleLogin = function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showNotification('الرجاء إدخال البريد الإلكتروني وكلمة المرور', 'error');
+                return;
+            }
+
+            // محاكاة تسجيل دخول
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user || (email === 'test@test.com' && password === '123456')) {
+                localStorage.setItem('currentUser', JSON.stringify({
+                    email: email,
+                    name: user?.name || 'مستخدم',
+                    level: 'متوسط'
+                }));
+                
+                showNotification('تم تسجيل الدخول بنجاح!', 'success');
+                setTimeout(() => window.location.href = 'dashboard.html', 1500);
+            } else {
+                showNotification('البريد أو كلمة المرور غير صحيحة', 'error');
+            }
+        };
+
+        // تسجيل الدخول بـ Google
+        window.googleLogin = function() {
+            showNotification('جاري تسجيل الدخول بـ Google...', 'info');
+            
+            setTimeout(() => {
+                localStorage.setItem('currentUser', JSON.stringify({
+                    email: 'user@gmail.com',
+                    name: 'مستخدم Google',
+                    level: 'متوسط',
+                    isGoogle: true
+                }));
+                
+                showNotification('تم تسجيل الدخول بنجاح!', 'success');
+                setTimeout(() => window.location.href = 'dashboard.html', 1500);
+            }, 1500);
+        };
+
+        window.forgotPassword = function() {
+            const email = document.getElementById('loginEmail').value;
+            if (email) {
+                showNotification(`تم إرسال رابط إعادة التعيين إلى ${email}`, 'success');
+            } else {
+                showNotification('الرجاء إدخال بريدك الإلكتروني أولاً', 'info');
+            }
+        };
+
+        function showNotification(message, type) {
+            const oldAlert = document.querySelector('.alert');
+            if (oldAlert) oldAlert.remove();
+
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i><span>${message}</span>`;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => alert.remove(), 3000);
+        }
+
+        // التحقق من تسجيل الدخول
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('currentUser')) {
+                window.location.href = 'dashboard.html';
+            }
         });
     </script>
 </body>
-</html>
+                        </html>
