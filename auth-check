@@ -1,21 +1,44 @@
 // auth-check.js
-// حماية الصفحات من الدخول بدون تسجيل
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// التحقق من وجود مستخدم مسجل دخول
-const currentUser = localStorage.getItem('currentUser');
+// إعدادات Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyBnZGheBuw2S-dJUZ6f1jsx9e2ODv-gkX4",
+    authDomain: "project-9ca8a.firebaseapp.com",
+    projectId: "project-9ca8a",
+    storageBucket: "project-9ca8a.firebasestorage.app",
+    messagingSenderId: "1001751197267",
+    appId: "1:1001751197267:web:d6c56c243d0f3d678f38a6"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 // الصفحات المحمية
 const protectedPages = [
+    'dashboard.html',
     'lessons.html',
     'stories.html', 
-    'quiz.html',
-    'dashboard.html'
+    'quiz.html'
 ];
 
 // اسم الصفحة الحالية
-const currentPage = window.location.pathname.split('/').pop();
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
-// إذا كانت الصفحة محمية وما في مستخدم
-if (protectedPages.includes(currentPage) && !currentUser) {
-    window.location.href = 'index.html';
-}
+// مراقبة حالة المصادقة
+onAuthStateChanged(auth, (user) => {
+    console.log('Auth state changed:', user ? 'logged in' : 'logged out');
+    
+    // إذا كانت الصفحة محمية ومافيش مستخدم
+    if (protectedPages.includes(currentPage) && !user) {
+        console.log('No user, redirecting to index');
+        window.location.href = 'index.html';
+    }
+    
+    // إذا كانت الصفحة الرئيسية وفيها مستخدم
+    if (currentPage === 'index.html' && user) {
+        console.log('User logged in, redirecting to dashboard');
+        window.location.href = 'dashboard.html';
+    }
+});
