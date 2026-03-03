@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* تعديل الحقول - بدون أيقونات داخلية */
         .register-container {
             max-width: 800px;
             margin: 100px auto 2rem;
@@ -161,27 +162,10 @@
             color: var(--text-primary);
         }
         
-        .form-group label i {
-            color: var(--primary);
-            margin-left: 0.5rem;
-        }
-        
-        .input-group {
-            position: relative;
-        }
-        
-        .input-group i {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-tertiary);
-            transition: var(--transition);
-        }
-        
-        .input-group input {
+        /* تعديل: إزالة الأيقونات من الحقول */
+        .form-group input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            padding: 0.75rem 1rem;
             border: 2px solid var(--border-light);
             border-radius: var(--radius-md);
             background-color: var(--bg-primary);
@@ -190,14 +174,10 @@
             transition: var(--transition);
         }
         
-        .input-group input:focus {
+        .form-group input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-        
-        .input-group input:focus + i {
-            color: var(--primary);
         }
         
         .options-grid {
@@ -349,6 +329,50 @@
             font-size: 0.875rem;
             margin-top: 1rem;
         }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-hover);
+        }
     </style>
 </head>
 <body>
@@ -397,7 +421,7 @@
 
             <!-- الخطوة 1: إنشاء حساب -->
             <div class="step-content active" id="step1Content">
-                <form id="registerForm" onsubmit="event.preventDefault();">
+                <form id="registerForm">
                     <div class="form-section">
                         <h3>
                             <i class="fas fa-user-circle"></i>
@@ -406,60 +430,30 @@
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label>
-                                    <i class="fas fa-user"></i>
-                                    الاسم الأول
-                                </label>
-                                <div class="input-group">
-                                    <i class="fas fa-user"></i>
-                                    <input type="text" id="firstName" placeholder="أحمد" required>
-                                </div>
+                                <label>الاسم الأول</label>
+                                <input type="text" id="firstName" placeholder="أحمد" required>
                             </div>
                             
                             <div class="form-group">
-                                <label>
-                                    <i class="fas fa-user"></i>
-                                    اسم العائلة
-                                </label>
-                                <div class="input-group">
-                                    <i class="fas fa-user"></i>
-                                    <input type="text" id="lastName" placeholder="محمد" required>
-                                </div>
+                                <label>اسم العائلة</label>
+                                <input type="text" id="lastName" placeholder="محمد" required>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>
-                                <i class="fas fa-envelope"></i>
-                                البريد الإلكتروني
-                            </label>
-                            <div class="input-group">
-                                <i class="fas fa-envelope"></i>
-                                <input type="email" id="email" placeholder="ahmed@example.com" required>
-                            </div>
+                            <label>البريد الإلكتروني</label>
+                            <input type="email" id="email" placeholder="ahmed@example.com" required>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label>
-                                    <i class="fas fa-lock"></i>
-                                    كلمة المرور
-                                </label>
-                                <div class="input-group">
-                                    <i class="fas fa-lock"></i>
-                                    <input type="password" id="password" placeholder="********" required>
-                                </div>
+                                <label>كلمة المرور</label>
+                                <input type="password" id="password" placeholder="********" required>
                             </div>
                             
                             <div class="form-group">
-                                <label>
-                                    <i class="fas fa-lock"></i>
-                                    تأكيد كلمة المرور
-                                </label>
-                                <div class="input-group">
-                                    <i class="fas fa-lock"></i>
-                                    <input type="password" id="confirmPassword" placeholder="********" required>
-                                </div>
+                                <label>تأكيد كلمة المرور</label>
+                                <input type="password" id="confirmPassword" placeholder="********" required>
                             </div>
                         </div>
                         
@@ -470,7 +464,7 @@
                     </div>
                     
                     <div class="btn-group">
-                        <button type="button" class="btn btn-primary" onclick="goToStep2()">
+                        <button type="button" class="btn-primary" onclick="goToStep2()" id="nextBtn">
                             التالي
                             <i class="fas fa-arrow-left"></i>
                         </button>
@@ -612,11 +606,11 @@
                     </div>
 
                     <div class="btn-group">
-                        <button type="button" class="btn btn-secondary" onclick="goToStep1()">
+                        <button type="button" class="btn-secondary" onclick="goToStep1()">
                             <i class="fas fa-arrow-right"></i>
                             السابق
                         </button>
-                        <button type="button" class="btn btn-primary" onclick="calculateLevel()">
+                        <button type="button" class="btn-primary" onclick="calculateLevel()" id="calculateBtn">
                             عرض نتيجتي
                             <i class="fas fa-chart-line"></i>
                         </button>
@@ -669,31 +663,46 @@
                 </div>
 
                 <div class="btn-group">
-                    <button type="button" class="btn btn-secondary" onclick="goToStep2()">
+                    <button type="button" class="btn-secondary" onclick="goToStep2()">
                         <i class="fas fa-arrow-right"></i>
                         إعادة الاختبار
                     </button>
-                    <a href="dashboard.html" class="btn btn-primary">
+                    <button class="btn-primary" onclick="completeRegistration()" id="completeBtn">
                         ابدأ رحلتك
                         <i class="fas fa-rocket"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        let userData = {
-            firstName: '',
-            lastName: '',
-            email: '',
-            wordsLevel: '',
-            tenses: [],
-            quickTest: ''
+    <!-- Firebase SDK -->
+    <script type="module">
+        // استيراد Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnZGheBuw2S-dJUZ6f1jsx9e2ODv-gkX4",
+            authDomain: "project-9ca8a.firebaseapp.com",
+            projectId: "project-9ca8a",
+            storageBucket: "project-9ca8a.firebasestorage.app",
+            messagingSenderId: "1001751197267",
+            appId: "1:1001751197267:web:d6c56c243d0f3d678f38a6",
+            measurementId: "G-EQZ5ND3X3H"
         };
 
-        function goToStep2() {
-            // التحقق من صحة البيانات
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.userData = {
+            firstName: '', lastName: '', email: '', password: '',
+            wordsLevel: '', tenses: [], quickTest: '', level: '', score: 0
+        };
+
+        window.goToStep2 = function() {
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
@@ -701,26 +710,23 @@
             const confirmPassword = document.getElementById('confirmPassword').value;
 
             if (!firstName || !lastName || !email || !password) {
-                showAlert('الرجاء ملء جميع الحقول', 'error');
+                alert('الرجاء ملء جميع الحقول');
                 return;
             }
-
             if (password !== confirmPassword) {
-                showAlert('كلمة المرور غير متطابقة', 'error');
+                alert('كلمة المرور غير متطابقة');
                 return;
             }
-
             if (password.length < 6) {
-                showAlert('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+                alert('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
                 return;
             }
 
-            // حفظ البيانات
-            userData.firstName = firstName;
-            userData.lastName = lastName;
-            userData.email = email;
+            window.userData.firstName = firstName;
+            window.userData.lastName = lastName;
+            window.userData.email = email;
+            window.userData.password = password;
 
-            // تحديث الواجهة
             document.getElementById('step1').classList.remove('active');
             document.getElementById('step1').classList.add('completed');
             document.getElementById('stepLine1').classList.add('active');
@@ -728,9 +734,9 @@
             
             document.getElementById('step1Content').classList.remove('active');
             document.getElementById('step2Content').classList.add('active');
-        }
+        };
 
-        function goToStep1() {
+        window.goToStep1 = function() {
             document.getElementById('step2').classList.remove('active');
             document.getElementById('step1').classList.remove('completed');
             document.getElementById('step1').classList.add('active');
@@ -738,50 +744,37 @@
             
             document.getElementById('step2Content').classList.remove('active');
             document.getElementById('step1Content').classList.add('active');
-        }
+        };
 
-        function calculateLevel() {
-            // جمع البيانات
+        window.calculateLevel = function() {
             const wordsLevel = document.querySelector('input[name="wordsLevel"]:checked')?.value;
             const tenses = Array.from(document.querySelectorAll('input[name="tense"]:checked')).map(cb => cb.value);
             const quickTest = document.querySelector('input[name="quickTest"]:checked')?.value;
 
             if (!wordsLevel || !quickTest) {
-                showAlert('الرجاء إكمال جميع الأسئلة', 'error');
+                alert('الرجاء إكمال جميع الأسئلة');
                 return;
             }
 
-            // حفظ البيانات
-            userData.wordsLevel = wordsLevel;
-            userData.tenses = tenses;
-            userData.quickTest = quickTest;
+            window.userData.wordsLevel = wordsLevel;
+            window.userData.tenses = tenses;
+            window.userData.quickTest = quickTest;
 
-            // حساب المستوى
-            let level = '';
-            let message = '';
-            let recommendations = [];
             let score = 0;
-
-            // تقييم الكلمات
             if (wordsLevel === 'beginner') score += 20;
             else if (wordsLevel === 'intermediate') score += 40;
             else score += 60;
-
-            // تقييم الأزمنة
             score += tenses.length * 5;
-
-            // تقييم الاختبار السريع
             if (quickTest === 'a') score += 20;
 
-            // تحديد المستوى
+            let level, message, recommendations;
             if (score < 40) {
                 level = 'مبتدئ';
                 message = 'تبدأ رحلتك مع الإنجليزية. لا تقلق، كلنا بدأنا من الصفر!';
                 recommendations = [
                     'ابدأ بتعلم الكلمات الأساسية (تحيات، أرقام، ألوان)',
                     'ركز على الأفعال الشائعة: eat, drink, sleep, go',
-                    'تدرب على الأزمنة: Present Simple فقط',
-                    'شاهد فيديوهات المستوى المبتدئ يومياً'
+                    'تدرب على الأزمنة: Present Simple فقط'
                 ];
             } else if (score < 70) {
                 level = 'متوسط';
@@ -789,8 +782,7 @@
                 recommendations = [
                     'تعلم 10 كلمات جديدة يومياً',
                     'ركز على الأزمنة: Past Continuous, Present Perfect',
-                    'اقرأ القصص القصيرة وحاول فهمها',
-                    'تدرب على المحادثات اليومية'
+                    'اقرأ القصص القصيرة وحاول فهمها'
                 ];
             } else {
                 level = 'متقدم';
@@ -798,12 +790,10 @@
                 recommendations = [
                     'تعلم الـ Phrasal Verbs الشائعة',
                     'ركز على الأزمنة المعقدة: Past Perfect, Future Perfect',
-                    'اقرأ مقالات طويلة وحاول تلخيصها',
-                    'تدرب على الكتابة الأكاديمية'
+                    'اقرأ مقالات طويلة وحاول تلخيصها'
                 ];
             }
 
-            // عرض النتائج
             document.getElementById('resultLevel').textContent = `مستوى ${level}`;
             document.getElementById('resultMessage').textContent = message;
             document.getElementById('resultWords').textContent = 
@@ -811,21 +801,12 @@
             document.getElementById('resultTenses').textContent = tenses.length;
             document.getElementById('resultScore').textContent = Math.round(score) + '%';
 
-            // عرض التوصيات
-            const recommendationsList = document.getElementById('recommendationsList');
-            recommendationsList.innerHTML = recommendations.map(rec => `
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>${rec}</span>
-                </li>
-            `).join('');
+            document.getElementById('recommendationsList').innerHTML = 
+                recommendations.map(rec => `<li><i class="fas fa-check-circle"></i><span>${rec}</span></li>`).join('');
 
-            // حفظ البيانات في localStorage
-            userData.level = level;
-            userData.score = score;
-            localStorage.setItem('userData', JSON.stringify(userData));
+            window.userData.level = level;
+            window.userData.score = score;
 
-            // الانتقال للخطوة 3
             document.getElementById('step2').classList.remove('active');
             document.getElementById('step2').classList.add('completed');
             document.getElementById('stepLine2').classList.add('active');
@@ -833,29 +814,52 @@
             
             document.getElementById('step2Content').classList.remove('active');
             document.getElementById('step3Content').classList.add('active');
-        }
+        };
 
-        function showAlert(message, type) {
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.innerHTML = `
-                <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-                <span>${message}</span>
-            `;
-            alert.style.position = 'fixed';
-            alert.style.top = '100px';
-            alert.style.left = '50%';
-            alert.style.transform = 'translateX(-50%)';
-            alert.style.zIndex = '9999';
-            alert.style.minWidth = '300px';
-            alert.style.textAlign = 'center';
-            
-            document.body.appendChild(alert);
-            
-            setTimeout(() => {
-                alert.remove();
-            }, 3000);
-        }
+        window.completeRegistration = async function() {
+            const btn = document.getElementById('completeBtn');
+            btn.innerHTML = 'جاري إنشاء الحساب... <span class="loading-spinner"></span>';
+            btn.disabled = true;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(
+                    auth, window.userData.email, window.userData.password
+                );
+                const user = userCredential.user;
+
+                await setDoc(doc(db, "users", user.uid), {
+                    firstName: window.userData.firstName,
+                    lastName: window.userData.lastName,
+                    email: window.userData.email,
+                    level: window.userData.level,
+                    wordsLevel: window.userData.wordsLevel,
+                    tenses: window.userData.tenses,
+                    score: window.userData.score,
+                    savedWords: [],
+                    readStories: [],
+                    quizResults: [],
+                    createdAt: new Date().toISOString()
+                });
+
+                localStorage.setItem('currentUser', JSON.stringify({
+                    uid: user.uid,
+                    email: window.userData.email,
+                    name: window.userData.firstName + ' ' + window.userData.lastName,
+                    level: window.userData.level
+                }));
+
+                alert('تم إنشاء الحساب بنجاح!');
+                window.location.href = 'dashboard.html';
+
+            } catch (error) {
+                console.error(error);
+                let msg = 'حدث خطأ';
+                if (error.code === 'auth/email-already-in-use') msg = 'البريد مستخدم بالفعل';
+                alert(msg);
+                btn.innerHTML = 'ابدأ رحلتك <i class="fas fa-rocket"></i>';
+                btn.disabled = false;
+            }
+        };
     </script>
 </body>
 </html>
