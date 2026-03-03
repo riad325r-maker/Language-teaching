@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineLingua | الكلمات والجمل</title>
+    
+    <!-- حماية الصفحة (داخل head) -->
+    <script src="auth-check.js"></script>
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -551,7 +555,7 @@
             </ul>
             <div class="nav-buttons">
                 <!-- زر الثيم من theme.js -->
-                <a href="register.html" class="btn btn-primary">تسجيل الدخول</a>
+                <div class="theme-toggle" id="themeToggle"></div>
             </div>
         </div>
     </nav>
@@ -656,7 +660,8 @@
         });
 
         function updateTotalWords() {
-            const total = (WORDS_DATA.beginmer?.length || 0) + 
+            // تصحيح الخطأ: beginmer -> beginner
+            const total = (WORDS_DATA.beginner?.length || 0) + 
                          (WORDS_DATA.intermediate?.length || 0) + 
                          (WORDS_DATA.advanced?.length || 0);
             document.getElementById('totalWords').textContent = total;
@@ -738,7 +743,7 @@
                                 <div class="word-icon">${item.word[0].toUpperCase()}</div>
                                 <span class="word-text">${item.word}</span>
                             </div>
-                            <span class="word-badge ${levelClass}">${currentLevel}</span>
+                            <span class="word-badge ${levelClass}">${currentLevel === 'beginner' ? 'مبتدئ' : currentLevel === 'intermediate' ? 'متوسط' : 'متقدم'}</span>
                         </div>
                         
                         <div class="word-arabic">${item.arabic}</div>
@@ -864,8 +869,10 @@
 
         function showWordOfDay() {
             const word = getRandomWord();
-            document.getElementById('wordOfDayWord').textContent = word.word;
-            document.getElementById('wordOfDayArabic').textContent = word.arabic;
+            if (word) {
+                document.getElementById('wordOfDayWord').textContent = word.word;
+                document.getElementById('wordOfDayArabic').textContent = word.arabic;
+            }
         }
 
         function closeWordOfDay() {
@@ -907,4 +914,4 @@
         });
     </script>
 </body>
-</html>
+                                                      </html>
